@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Grid2";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { Box } from "@mui/material";
 
@@ -10,61 +10,55 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
-        p: 6,
+        backgroundColor: "rgb(227, 225, 225)",
+        p: 2,
       }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={5}>
-          <Grid item xs={12} sm={4}>
+      <Container maxWidth="lg" >
+        <Grid2 container spacing={8}>
+          <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
               About Us
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              We are XYZ company, dedicated to providing the best service to our
-              customers.
+            École d’Ingénieurs du Littoral Côte d’Opale – 50 Rue Ferdinand Buisson
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
+          </Grid2>
+          <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
               Contact Us
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              123 Main Street, Anytown, USA
+            CS 30613 – 62228 CALAIS CEDEX
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Email: info@example.com
+              Email: Contact@eilco.com
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Phone: +1 234 567 8901
+              Phone: +33 3 21 17 10 05
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
+          </Grid2>
+          <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
               Follow Us
             </Typography>
-            <Link href="https://www.facebook.com/" color="inherit">
+            <Link href="https://www.facebook.com/eilco.ulco/?locale=fr_FR" color="inherit">
               <Facebook />
             </Link>
             <Link
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/eilco_ulco/?hl=fr"
               color="inherit"
               sx={{ pl: 1, pr: 1 }}>
               <Instagram />
             </Link>
-            <Link href="https://www.twitter.com/" color="inherit">
+            <Link href="https://twitter.com/ulco_univ/status/1068160457129803777" color="inherit">
               <Twitter />
             </Link>
-          </Grid>
-        </Grid>
-        <Box mt={5}>
+          </Grid2>
+        </Grid2>
+        <Box mt={2}>
           <Typography variant="body2" color="text.secondary" align="center">
             {"Copyright © "}
-            <Link color="inherit" href="https://your-website.com/">
-              Your Website
-            </Link>{" "}
+            
             {new Date().getFullYear()}
             {"."}
           </Typography>
