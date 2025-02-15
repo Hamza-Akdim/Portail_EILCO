@@ -3,6 +3,7 @@ import Footer from "../components/Footer/Footer";
 import { Container, Box, Typography } from "@mui/material";
 import News from "../components/News/News";
 import ReactWeather, { useWeatherBit } from 'react-open-weather';
+
 function AppLayout() {
   const mockNews = [
     {
@@ -80,7 +81,10 @@ function AppLayout() {
           </Box>
 
           {/* News Section */}
+
           {/*
+=======
+>>>>>>> origin/login-prototype
           <Box
             sx={{
               backgroundColor: "lightgray",

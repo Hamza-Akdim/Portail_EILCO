@@ -1,16 +1,26 @@
+import "./App.css";
+import Login from "./components/auth/Login";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 import AppLayout from "./pages/AppLayout";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Roboto, Arial, sans-serif",
-  },
-});
+import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
-  //Here we will implements the routes
-  return <AppLayout />; //AppLayout: the layout route
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ChakraProvider>
+              <Login />
+            </ChakraProvider>
+          }
+        />
+
+        <Route path="/espace-eilco" element={<AppLayout />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
