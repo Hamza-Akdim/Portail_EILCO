@@ -1,3 +1,12 @@
+server:
+  port: 8081
+
+auth:
+  token:
+    expirationInMils: 3600000
+    jwtSecret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
+
+
 spring:
   application:
     name: backend
@@ -14,8 +23,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-
-    show-sql: true
 
     hibernate:
       ddl-auto: update

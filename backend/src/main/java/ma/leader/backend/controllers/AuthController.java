@@ -1,40 +1,51 @@
 package ma.leader.backend.controllers;
 
-import ma.leader.backend.entities.User;
-import ma.leader.backend.responses.UserResponse;
+
+import lombok.RequiredArgsConstructor;
+import ma.leader.backend.repositories.UserRepository;
+import ma.leader.backend.requests.AuthRequest;
+import ma.leader.backend.requests.SignupRequest;
+import ma.leader.backend.responses.AuthResponse;
+import ma.leader.backend.security.JwtUtils;
+import ma.leader.backend.security.UserDetailsImpl;
 import ma.leader.backend.services.AuthService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author akdim
  */
+
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class AuthController {
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final AuthService authService;
 
-    @Autowired
-    private AuthService authService;
+    @PostMapping("/signup")
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody SignupRequest signupRequest) {
+        String token = authService.registreUser(signupRequest);
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
 
-    @GetMapping("/get-user")
-    public ResponseEntity<?> getUser(@RequestParam("email") String email, @RequestParam("encryptedPassword") String password) {
-        User user = authService.getUser(email, password);
 
+    @PostMapping("/login")
+    public AuthResponse authenticateUser(@RequestBody AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
+        );
 
-        if(user!=null){
-            if(user.getEncryptedPassword().equals(password)){
-                UserResponse response = new UserResponse();
-                BeanUtils.copyProperties(user, response);
-                return ResponseEntity.ok(response);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtils.generateToken(userDetails.getUsername());
 
-            }
-            else
-                return ResponseEntity.status(404).body("Password is incorrect");
-        }
-
-        return ResponseEntity.status(404).body("User doesn't exist");
+        return new AuthResponse(jwt);
     }
 }
