@@ -1,25 +1,22 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL :"http://localhost:8080"
+    baseURL :"http://localhost:8081"
 })
 
 
 export const auth = async(email, password)=>{
-    const formData = new FormData()
-    formData.append("email", email)
-    formData.append("encryptedPassword", password)
+    const requestBody = {
+        "email" : email ,
+        "password" :  password
+    }
     
-    const response = await api.get("api/auth/get-user",  {
-        params: {
-            email: email,
-            encryptedPassword: password,
-        },
+    const response = await api.post("api/auth/login",  
+        requestBody,{ 
+        headers: {
+            "Content-Type": "application/json"
+          }
     })
 
-    console.log(response)
-
-    if (response.status === 200) return true
-
-    return false
+    return response
 }

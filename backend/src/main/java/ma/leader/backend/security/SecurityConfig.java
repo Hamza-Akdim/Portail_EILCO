@@ -43,6 +43,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/etudiant/**").hasAuthority("ETUDIANT") // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
+                        .requestMatchers("/api/professeur/**").hasAuthority("PROFESSEUR")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,23 +1,21 @@
-import React, { useState } from 'react'
-import { auth } from '../../utils/apiFunctions'
-import { useToast } from '@chakra-ui/react'
+import React, { useState } from "react";
+import { auth } from "../../utils/apiFunctions";
+import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
 
 const Login = () => {
 
-  const [email, setEmail] = useState()
-  const [show, setShow] = useState(false)
-  const [password, setPassword] = useState()
- 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
+
   const toast = useToast();
   const navigate = useNavigate();
 
-
-
-
-  const submitHandler = async()=>{
-
+  const submitHandler = async (event) => {
+  
+    event.preventDefault();
+  
     if (!email || !password) {
       toast({
         title: "Veuillez remplir tous les champs",
@@ -30,32 +28,29 @@ const Login = () => {
     }
 
     try {
-      const result = await auth(email,password)
-      
-      if(result){
-				toast({
-          title: "Connexion réussie!",
+      const result = await auth(email, password);
+
+      if (result.status === 200) {
+        toast({
+          title: "Connexion réussie !!",
           status: "success",
           duration: 5000,
           isClosable: true,
           position: "bottom",
         });
-        
+
         navigate("espace-eilco");
       }
-      
     } catch (error) {
       if (error.response) {
-
         const { data } = error.response;
         toast({
-          title: `Error: ${data}`,
+          title: `${data}`,
           status: "error",
           duration: 5000,
           isClosable: true,
           position: "bottom",
         });
-
       } else if (error.request) {
         toast({
           title: "Network Error",
@@ -74,65 +69,87 @@ const Login = () => {
         });
       }
     }
-    }
-    
-  
+  };
 
   return (
-    <div className="bg-login-bg sm:bg-white w-screen h-screen flex justify-center items-center">
-      <div className="bg-login-bg py-10 mx-auto h-full min-h-fit min-w-fit my-auto max-h-[500px] sm:w-[38%] sm:h-[85%] md:max-w-[1240px] md:max-h-[1000px] md grid grid-rows-[2fr 1fr 1fr 2fr] gap-2 sm:shadow-login-sh sm:border sm:border-gray-500 sm:rounded-lg">
-          <div className='row-span-2 flex justify-center items-center mb-5'>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-6 lg:px-4">
+      <div className="w-full max-w-md sm:max-w-5xl min-h-[550px] bg-white shadow-none sm:shadow-lg sm:rounded-lg overflow-hidden flex flex-col lg:flex-row">
+        
+        <div
+          className="hidden lg:block lg:w-3/5 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/universite-du-littoral-cote-d-opale-23.jpg')",
+          }}
+        ></div>
+
+        <div className="w-full lg:w-2/5 p-8 flex flex-col justify-center">
+          <div className="flex justify-center mb-6">
             <img
-            className='w-[220px] sm:w-[230px] md:w-[250px] 2xl:w-[400px] mx-auto'
-            src="EILCO-LOGO.png" 
-            alt="/" 
+              src="/EILCO-LOGO.png"
+              alt="EILCO Logo"
+              className="h-12 sm:h-14 md:h-20 w-auto"
             />
           </div>
-          <div className='flex gap-1 flex-col w-full px-16 my-4'>
-              <div className= 'text-sm sm:texte-base 2xl:text-4xl'>Email</div>
-              <input 
-                className='p-[6px] 2xl:py-4 text-sm xl:text-base 2xl:text-3xl w-full border border-black rounded-md text-black' 
-                placeholder="Enter your Email" 
-                onChange={(e) => setEmail(e.target.value)}
-    
-                />
-    
-          </div>
 
-          <div className='flex gap-1 flex-col w-full px-16 my-4'>
-            <div className= 'text-sm sm:texte-base 2xl:text-4xl'>Password</div>
-            <div className='flex justify-between items-center gap-2'>
+          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center">
+            Se Connecter
+          </h2>
 
+          <form>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Email
+              </label>
               <input
-                className='p-[6px] 2xl:py-4 text-sm xl:text-base 2xl:text-3xl w-full border border-black rounded-md text-black'
-                type={show ? "text" : "password"}
-                value={password}
-                placeholder="Enter your password"
-                onChange={(e) => setPassword(e.target.value)}
-                />
-                
-
-                <button
-                className='text-xs 2xl:text-xl p-[6px] border border-gray-500 rounded'
-                onClick={() => setShow(!show)}
-                >
-                  {show ? "Hide" : "Show"}
-                </button>
+                type="email"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Entrez votre email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-          </div>
 
-          <div className='flex justify-center items-center px-16'>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Mot de passe
+              </label>
+              <input
+                type={showPassword ? "text" : "password"} // Toggle between text and password
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Entrez votre mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="flex justify-between items-center text-xs sm:text-sm mb-6">
+              <div>
+                <input
+                  type="checkbox"
+                  id="showPassword"
+                  className="mr-2"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
+                />
+                <label htmlFor="showPassword">Afficher le mot de passe</label>
+              </div>
+              <a href="#" className="text-blue-500 hover:underline">
+                Mot de passe oublié ?
+              </a>
+            </div>
+
             <button
-              className="p-[6px] 2xl:py-4 2xl:text-4xl text-sm xl:text-base w-full text-white bg-eilco-blue border-2 border-eilco-blue rounded-md font-semibold"
-              onClick={submitHandler}
+              type="submit"
+              className="w-full bg-eilco-blue text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+              onClick={(e) => submitHandler(e)}
             >
-              Login
+              Se connecter
             </button>
-          </div>
-
+          </form>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
