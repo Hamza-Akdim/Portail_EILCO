@@ -105,8 +105,9 @@ const Weather = () => {
               setLoading(false);
             });
         },
-        () => {
-          setError("Unable to retrieve your location.");
+        (err) => {
+          console.error("Erreur de géolocalisation :", err);
+          setError(err.message || "Unable to retrieve your location.");
           setLoading(false);
         }
       );
