@@ -1,4 +1,9 @@
 spring:
+  mvc:
+    static-path-pattern: ./backend/uploads/**
+  web:
+    resources:
+      static-locations: file:./backend/uploads/uploads/
   application:
     name: backend
 
@@ -20,3 +25,5 @@ spring:
     hibernate:
       ddl-auto: update
 
+server:
+  port: 8081
