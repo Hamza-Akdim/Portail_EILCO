@@ -2,6 +2,7 @@ package ma.leader.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ma.leader.backend.enums.UserRole;
 
 /**
  * @author akdim
@@ -24,5 +25,5 @@ public class User {
 
     private String encryptedPassword;
 
-    private String role;
+    private UserRole role;
 }

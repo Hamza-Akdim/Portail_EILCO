@@ -1,5 +1,7 @@
 package ma.leader.backend.responses;
 
+
+import lombok.AllArgsConstructor;
 import lombok.*;
 
 /**
@@ -8,12 +10,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-    private String firstname;
-    private String lastname;
+public class AuthResponse {
     private String email;
-    private String encryptedPassword;
+    private String firstName;
+    private String lastName;
     private String role;
 }
