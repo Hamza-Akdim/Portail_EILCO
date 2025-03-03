@@ -42,7 +42,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/api/**").permitAll() // Normally /api/auth/** bdltha db ghir bach mndir authentification ... hhh
                         .requestMatchers("/api/etudiant/**").hasAuthority("ETUDIANT") // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
                         .requestMatchers("/api/professeur/**").hasAuthority("PROFESSEUR")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
