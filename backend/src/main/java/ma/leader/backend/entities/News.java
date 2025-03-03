@@ -17,7 +17,11 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String fullContent;
     private String category;
-    private String imageUrl;
+
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
     private LocalDateTime publishedAt;
     private LocalDateTime expiryDate;
 }

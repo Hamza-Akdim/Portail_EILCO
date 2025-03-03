@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/NavBar";
 import Footer from "../components/Footer/Footer";
 import { Container, Box, Typography } from "@mui/material";
-import News from "../components/News/News";
+import News from "../components/News/NewsList.jsx";
 import ReactWeather, { useWeatherBit } from 'react-open-weather';
 
 function AppLayout() {

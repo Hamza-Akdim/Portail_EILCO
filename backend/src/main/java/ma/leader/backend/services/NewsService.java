@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +18,6 @@ import java.util.Optional;
 public class NewsService {
 
     private final NewsRepository newsRepository;
-
 
     public List<News> getAllNews() {
         return newsRepository.findAll();
@@ -34,14 +30,13 @@ public class NewsService {
     public List<News> getNewsByCategory(String category) {
         return newsRepository.findByCategory(category);
     }
-    private static final String UPLOAD_DIR = "./backend/uploads/";
-    public News addNews(News news, MultipartFile image) throws IOException {
-        if (image != null && !image.isEmpty()) {
-            String imageUrl = saveImage(image);
-            news.setImageUrl(imageUrl);
-        }
 
+    public News addNews(News news, MultipartFile image) throws IOException {
+        news.setImageName(image.getOriginalFilename());
+        news.setImageType(image.getContentType());
+        news.setImageData(image.getBytes());
         news.setPublishedAt(LocalDateTime.now());
+
         return newsRepository.save(news);
     }
 
@@ -56,7 +51,9 @@ public class NewsService {
 
                     if (image != null && !image.isEmpty()) {
                         try {
-                            existingNews.setImageUrl(saveImage(image));
+                            existingNews.setImageName(image.getOriginalFilename());
+                            existingNews.setImageType(image.getContentType());
+                            existingNews.setImageData(image.getBytes());
                         } catch (IOException e) {
                             log.error("Erreur lors de l'enregistrement de l'image", e);
                         }
@@ -68,16 +65,9 @@ public class NewsService {
     }
 
     public void deleteNews(Long id) {
+        if (!newsRepository.existsById(id)) {
+            throw new RuntimeException("News not found");
+        }
         newsRepository.deleteById(id);
-    }
-
-    private String saveImage(MultipartFile image) throws IOException {
-        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-        Path filePath = Paths.get(UPLOAD_DIR, fileName);
-
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, image.getBytes());
-
-        return "http://localhost:8081/uploads/" + fileName;
     }
 }

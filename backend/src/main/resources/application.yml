@@ -1,5 +1,14 @@
 server:
   port: 8081
+
+auth:
+  token:
+    expirationInMils: 3600000
+    jwtSecret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
+
+cookie:
+  client:
+    path: "http://localhost:5173"
 spring:
   mvc:
     static-path-pattern: ./backend/uploads/**
