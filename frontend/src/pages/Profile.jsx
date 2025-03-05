@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/NavBar";
 import Avatar from "@mui/material/Avatar";
@@ -9,7 +8,6 @@ const Profile = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     getUserDetails()
@@ -24,49 +22,15 @@ const Profile = () => {
   }, [firstname, lastname, email]);
 
   return (
-    // <div className="flex flex-col min-h-screen bg-white text-black">
-    //   <Navbar />
-    //   <div className="relative w-full text-center">
-    //     {/* Image de couverture */}
-    //     <div className="w-full h-56 bg-cover bg-center" style={{ backgroundImage: "url('universite-du-littoral-cote-d-opale-23.jpg')" }}></div>
-
-    //     {/* Avatar centré en dessous de l'image */}
-    //     <div className="absolute top-44 left-1/2 transform -translate-x-1/2">
-    //       <Avatar
-    //         mr={2}
-    //         size={"sm"}
-    //         cursor={"pointer"}
-    //         name={name}
-    //       />
-    //     </div>
-    //   </div>
-
-    //   {/* Informations du profil */}
-    //   <div className="bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md text-center mt-20">
-    //     <h1 className="text-xl font-bold">{name}</h1>
-    //     <p className="text-gray-600">{email}</p>
-
-    //     <div className="bg-gray-200 p-4 rounded-lg mt-6">
-    //       <p className="text-black font-semibold">{name} n a pas encore ajouté d informations</p>
-    //       <p className="text-gray-600 text-sm">Le titre et la section à propos s afficheront ici</p>
-    //     </div>
-
-    //     {/* Formulaire de mise à jour */}
-
-    //   </div>
-
-    //   <Footer />
-    // </div>
-
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow">
-        {/* Image de couverture */}
+
         <div
           className="w-full h-56 bg-cover bg-center relative"
           style={{
             backgroundImage:
-              "url('universite-du-littoral-cote-d-opale-23.jpg')",
+              "url(../../public/universite-du-littoral-cote-d-opale-23.jpg)",
           }}
         >
           <div className="absolute bottom-0 left-4 transform translate-y-1/2">

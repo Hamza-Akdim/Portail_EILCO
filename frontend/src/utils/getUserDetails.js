@@ -23,7 +23,7 @@ const getUserDetails = () => {
 export const logout = () => {
     fetch("http://localhost:8080/api/auth/logout", { method: "POST", credentials: "include" })
         .then(() => {
-            Cookies.remove("jwt"); // ✅ Remove token from cookies
+            Cookies.remove("token"); 
             window.location.href = "/login";
         });
 };
