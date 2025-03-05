@@ -29,6 +29,8 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public String registreUser(SignupRequest request) throws UserAlreadyExists{
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+            System.out.println(existingUser);
+
         if (existingUser.isPresent()) {
             new UserAlreadyExists("Error: This email already exists");
         }
@@ -53,8 +55,10 @@ public class AuthServiceImpl implements AuthService{
             return UserRole.ETUDIANT;
         } else if (email.contains("@prof")) {
             return UserRole.PROFESSEUR;
-        } else {
+        } else if (email.contains("@admin")){
             return UserRole.ADMIN;
+        }else{
+            return null;
         }
     }
 }

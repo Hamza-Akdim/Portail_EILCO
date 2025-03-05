@@ -32,4 +32,11 @@ public class SignupRequest {
     private String password;
 
     private UserRole role;
+
+    public SignupRequest(String firstname, String lastname, String email, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+    }
 }
