@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -46,9 +46,10 @@ public class AuthController {
             String token = authService.registreUser(signupRequest);
 
             Cookie jwtCookie = new Cookie("token", token);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
+            jwtCookie.setHttpOnly(false);
+            jwtCookie.setSecure(false);
             jwtCookie.setPath("/");
+            jwtCookie.setAttribute("SameSite", "Lax");
             jwtCookie.setMaxAge(24 * 60 * 60);
             response.addCookie(jwtCookie);
 
@@ -72,9 +73,10 @@ public class AuthController {
         String token = jwtUtils.generateToken(userDetails.getUsername(), userDetails.getUser().getFirstname(), userDetails.getUser().getLastname(), userDetails.getUser().getRole());
 
         Cookie jwtCookie = new Cookie("token", token);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
+        jwtCookie.setHttpOnly(false);
+        jwtCookie.setSecure(false);
         jwtCookie.setPath("/");
+        jwtCookie.setAttribute("SameSite", "Lax");
         jwtCookie.setMaxAge(24 * 60 * 60);
             response.addCookie(jwtCookie);
 
@@ -90,9 +92,10 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie jwtCookie = new Cookie("token", null);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
+        jwtCookie.setHttpOnly(false);
+        jwtCookie.setSecure(false);
         jwtCookie.setPath("/");
+        jwtCookie.setAttribute("SameSite", "Lax");
         jwtCookie.setMaxAge(0);
         response.addCookie(jwtCookie);
 
