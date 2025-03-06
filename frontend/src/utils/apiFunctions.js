@@ -40,7 +40,6 @@ export const signUpEtud = async(firstName, lastName, email, password)=>{
 export const getUserDetails = async () => {
     try {
         const response = await api("api/auth/me")  
-
         return response.data; 
     } catch (error) {
         console.error("Failed to fetch user details", error);

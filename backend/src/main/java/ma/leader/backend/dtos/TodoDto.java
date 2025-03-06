@@ -1,4 +1,4 @@
-package ma.leader.backend.entities;
+package ma.leader.backend.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

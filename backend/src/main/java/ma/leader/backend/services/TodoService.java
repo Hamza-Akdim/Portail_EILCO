@@ -1,6 +1,6 @@
 package ma.leader.backend.services;
 
-import ma.leader.backend.entities.TodoDto;
+import ma.leader.backend.dtos.TodoDto;
 
 import java.util.List;
 

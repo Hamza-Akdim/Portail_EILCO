@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { getNews, deleteNews, updateNews, addNews } from "../../utils/apiFunctions";
+import { padding } from "@mui/system";
 
 const NewsAdmin = () => {
   const [newsList, setNewsList] = useState([]);
@@ -116,7 +117,7 @@ const NewsAdmin = () => {
   };
 
   return (
-      <Container>
+      <Container className="py-8">
         <Typography variant="h4" align="center" gutterBottom>
           Gestion des News
         </Typography>

@@ -10,6 +10,7 @@ import TodoList from "./pages/TodoList";
 import TodoComponent from "./components/TodoList/TodoComponent";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/auth/controll/protectedRoute";
+import NewsAdmin from "./components/News/NewsAdmin";
 
 function App() {
   return (
@@ -35,8 +36,9 @@ function App() {
 
         <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
           <Route path="/espace-admin" element={<AppLayout />}>
-            {/* <Route index element={<Main />} /> */}
-            <Route index element={<AdminPage />} />
+            <Route index element={<Main />} />
+            <Route path="addNews" element={<NewsAdmin />} />
+            <Route path="add" element={<AdminPage />} />
             <Route path="profile" element={<Profile />} />
           </Route>
         </Route>

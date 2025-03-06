@@ -31,7 +31,7 @@ const pages = [
   { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
 ];
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Ajouter Compte", "Ajouter News", "Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -39,6 +39,7 @@ function Navbar() {
   const [firstname, setFirstname] = React.useState("");
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [role, setRole] = React.useState("");
 
   React.useEffect(() => {
     getUserDetails()
@@ -46,6 +47,7 @@ function Navbar() {
         setFirstname(result.firstName);
         setLastname(result.lastName);
         setEmail(result.email);
+        setRole(result.role);
       })
       .catch((err) =>
         console.log(`Error while fetchinf the user data : ${err}`)
@@ -58,17 +60,18 @@ function Navbar() {
     handleCloseUserMenu();
 
     if (setting === "Profile") {
-        navigate("/espace-eilco/profile");
-        
+      navigate("/espace-eilco/profile");
     } else if (setting === "Logout") {
-        const response = await logout();
-        if (response) {
-            navigate("/");
-        } else {
-            console.error("Logout failed");
-        }
+      const response = await logout();
+      if (response) {
+        navigate("/");
+      } else {
+        console.error("Logout failed");
+      }
+    } else if (setting === "Ajouter Compte") {
+      navigate("/espace-admin/add");
     }
-};
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -86,11 +89,7 @@ function Navbar() {
 
   return (
     <AppBar position="fixed">
-      <Container maxWidth={false} sx={
-        {
-          
-        }
-      }>
+      <Container maxWidth={false} sx={{}}>
         <Toolbar
           disableGutters
           sx={{
@@ -250,8 +249,19 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => handleUserMenuClick(setting)}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting}
+                  onClick={() => handleUserMenuClick(setting)}
+                >
+                  {role != "ADMIN" ? (
+                    <Typography textAlign="center">
+                      {setting != "Ajouter Compte" && setting != "Ajouter News"
+                        ? setting
+                        : null}
+                        </Typography>
+                  ) : (
+                    <Typography textAlign="center">{setting}</Typography>
+                  )}
                 </MenuItem>
               ))}
             </Menu>
