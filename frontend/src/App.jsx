@@ -38,8 +38,9 @@ function App() {
 
         <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
           <Route path="/espace-admin" element={<AppLayout />}>
-            {/* <Route index element={<Main />} /> */}
-            <Route index element={<AdminPage />} />
+            <Route index element={<Main />} />
+            <Route path="addNews" element={<NewsAdmin />} />
+            <Route path="add" element={<AdminPage />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
           </Route>

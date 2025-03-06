@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { getNews, deleteNews, updateNews, addNews } from "../../utils/apiFunctions";
-import Stagecomponent from "../Stage/Stagecomponent";
 
 const NewsAdmin = () => {
   const [newsList, setNewsList] = useState([]);
@@ -117,7 +116,7 @@ const NewsAdmin = () => {
   };
 
   return (
-    <Container>
+    <Container className="py-8">
       <Typography variant="h4" align="center" marginTop={3} gutterBottom>
         Gestion des News
       </Typography>

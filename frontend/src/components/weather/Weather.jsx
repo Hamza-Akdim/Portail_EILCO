@@ -141,8 +141,9 @@ const Weather = () => {
 
     return (
       <div
-        className={`relative p-2 sm:p-4 overflow-hidden rounded-md ${theme.bgClass} w-full`}>
-        <div className="w-full bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-2 sm:p-4">
+        className={`relative  overflow-hidden rounded-md ${theme.bgClass} w-full`}
+      >
+        <div className="w-full !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bg-white/10 backdrop-blur-md rounded-md shadow-2xl p-2 sm:p-4">
           <div className="flex flex-row lg:flex-col items-center justify-center">
             {/* Left column: icon and temperature */}
             <div className="flex flex-col items-center justify-center flex-1 border-r border-white/20 pr-2">
@@ -150,11 +151,13 @@ const Weather = () => {
                 {theme.icon}
               </div>
               <h2
-                className={`text-xl sm:text-2xl font-bold mb-1 ${theme.textColor}`}>
+                className={`text-xl sm:text-2xl font-bold mb-1 ${theme.textColor}`}
+              >
                 {theme.name}
               </h2>
               <div
-                className={`text-2xl sm:text-3xl font-bold mb-2 ${theme.textColor}`}>
+                className={`text-2xl sm:text-3xl font-bold mb-2 ${theme.textColor}`}
+              >
                 {Math.round(temperature)}°C
               </div>
             </div>

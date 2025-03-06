@@ -1,6 +1,6 @@
 package ma.leader.backend.controllers;
 import lombok.AllArgsConstructor;
-import ma.leader.backend.entities.TodoDto;
+import ma.leader.backend.dtos.TodoDto;
 import ma.leader.backend.services.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
