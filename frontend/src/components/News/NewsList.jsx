@@ -40,7 +40,7 @@ const NewsList = ({ newsList }) => {
                     },
                 }}
             >
-                Actualités de l'école
+                Actualités de l école
             </Typography>
             <NewsCard
                 news={newsList[currentIndex]}

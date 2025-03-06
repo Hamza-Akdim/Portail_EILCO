@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const api = axios.create({
     baseURL :"http://localhost:8081",
-    withCredentials: true,  // To allow the sent and recieve of cookies
+    withCredentials: true,  
 })
 
 
@@ -16,6 +16,23 @@ export const auth = async (email, password) => {
             "Content-Type": "application/json"
           }
     })
+    return response
+}
+
+export const signUpEtud = async(firstName, lastName, email, password)=>{
+    const requestBody = {
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        password: password
+    };
+
+    const response = await api.post("api/auth/signup", requestBody, {
+        headers: {
+            "Content-Type": "application/json"
+          }
+    })
+    console.log(response)
     return response
 }
 

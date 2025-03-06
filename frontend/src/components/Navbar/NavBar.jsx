@@ -86,7 +86,11 @@ function Navbar() {
 
   return (
     <AppBar position="fixed">
-      <Container maxWidth={false}>
+      <Container maxWidth={false} sx={
+        {
+          
+        }
+      }>
         <Toolbar
           disableGutters
           sx={{
@@ -225,7 +229,7 @@ function Navbar() {
                   >
                     {firstname?.slice(0, 2).toUpperCase()}
                   </Avatar>
-                  <div className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
               </IconButton>
             </Tooltip>

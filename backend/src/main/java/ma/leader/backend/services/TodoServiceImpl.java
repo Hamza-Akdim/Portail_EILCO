@@ -3,7 +3,7 @@ package ma.leader.backend.services;
 import lombok.AllArgsConstructor;
 import ma.leader.backend.entities.Todo;
 import ma.leader.backend.exception.ResourceNotFoundException;
-import ma.leader.backend.repositories.TodoDto;
+import ma.leader.backend.entities.TodoDto;
 import ma.leader.backend.repositories.TodoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

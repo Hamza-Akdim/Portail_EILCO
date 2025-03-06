@@ -8,6 +8,8 @@ import Main from "./pages/Main";
 import Contact from "./pages/Contact";
 import TodoList from "./pages/TodoList";
 import TodoComponent from "./components/TodoList/TodoComponent";
+import AdminPage from "./pages/AdminPage";
+import ProtectedRoute from "./components/auth/controll/protectedRoute";
 
 function App() {
   return (
@@ -22,17 +24,21 @@ function App() {
           }
         />
 
-        {/* Routes nécessitant le layout avec Navbar et Footer */}
         <Route path="/espace-eilco" element={<AppLayout />}>
-          {/* Route par défaut */}
           <Route index element={<Main />} />
-          {/* Autres pages accessibles via la Navbar */}
           <Route path="contacts" element={<Contact />} />
-          {/* Vous pouvez ajouter d'autres routes ici */}
           <Route path="todos" element={<TodoList />} />
           <Route path="add-todo" element={<TodoComponent />} />
           <Route path="update-todo/:id" element={<TodoComponent />} />
           <Route path="profile" element={<Profile />} />
+        </Route>
+
+        <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
+          <Route path="/espace-admin" element={<AppLayout />}>
+            {/* <Route index element={<Main />} /> */}
+            <Route index element={<AdminPage />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

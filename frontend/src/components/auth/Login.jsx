@@ -39,7 +39,14 @@ const Login = () => {
           position: "bottom",
         });
 
-        navigate("espace-eilco");
+        //To FIX AFTER
+        if (email.includes("@etu") || email.includes("@prof")) {
+          navigate("espace-eilco");
+        } else if (email.includes("@admin")) {
+          navigate("espace-admin");
+        } else {
+          navigate("/"); 
+        }      
       }
     } catch (error) {
       if (error.response) {
