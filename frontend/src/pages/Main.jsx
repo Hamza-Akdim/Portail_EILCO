@@ -4,14 +4,17 @@ import Weather from "../components/weather/Weather";
 import NewsList from "../components/News/NewsList";
 import { getNews } from "../utils/apiFunctions";
 import NewsAdmin from "../components/News/NewsAdmin";
-
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 function Main() {
     const [newsList, setNewsList] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         loadNews();
     }, []);
-
+    const handleNavigateToNewsAdmin = () => {
+        navigate("/espace-admin/news-admin");
+    };
     const loadNews = async () => {
         try {
             const news = await getNews();
@@ -48,7 +51,15 @@ function Main() {
                     </Typography>
                 )}
             </Box>
-            <NewsAdmin />
+            <Box display="flex" justifyContent="center" mt={3}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNavigateToNewsAdmin}  // Utilisation correcte de la fonction de navigation
+                >
+                    Accéder à l'administration des nouvelles
+                </Button>
+            </Box>
         </Container>
     );
 }

@@ -10,6 +10,8 @@ import TodoList from "./pages/TodoList";
 import TodoComponent from "./components/TodoList/TodoComponent";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/auth/controll/protectedRoute";
+import Stagecomponent from "./components/Stage/Stagecomponent";
+import NewsAdmin from "./components/News/NewsAdmin";
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
           <Route path="add-todo" element={<TodoComponent />} />
           <Route path="update-todo/:id" element={<TodoComponent />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="stages" element={<Stagecomponent />} />
         </Route>
 
         <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
@@ -38,6 +41,7 @@ function App() {
             {/* <Route index element={<Main />} /> */}
             <Route index element={<AdminPage />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="news-admin" element={<NewsAdmin />} />
           </Route>
         </Route>
       </Routes>
