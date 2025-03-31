@@ -8,47 +8,69 @@ import {
   IconButton,
   InputAdornment,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { signUpEtud } from "../../utils/apiFunctions";
+import { signUp } from "../../utils/apiFunctions";
 
-const AddEtud = () => {
+const AddUsers = () => {
   const [firstNameEtud, setFirstNameEtud] = useState("");
   const [lastNameEtud, setLastNameEtud] = useState("");
   const [emailEtud, setEmailEtud] = useState("");
   const [passwordEtud, setPasswordEtud] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); 
-  const [apiError, setApiError] = useState(""); 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [apiError, setApiError] = useState("");
 
+  const roles = ["Etudiant", "Professeur", "Editeur", "Admin"];
+
+  const handleRole = (e)=>{
+    if(e.target.value==="Etudiant")
+      setRole("ETUD")
+    else if(e.target.value==="Professeur")
+      setRole("PROF")
+    else if(e.target.value==="Editeur")
+      setRole("EDIT")
+    else
+      setRole("ADM")
+
+  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (passwordEtud !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
     setError("");
-    setApiError(""); 
+    setApiError("");
 
     try {
-      await signUpEtud(firstNameEtud, lastNameEtud, emailEtud, passwordEtud);
-      setSuccessMessage("Inscription réussie !!"); 
+      await signUp(firstNameEtud, lastNameEtud, emailEtud, passwordEtud, role);
+      setSuccessMessage("Inscription réussie !!");
 
       setFirstNameEtud("");
       setLastNameEtud("");
       setEmailEtud("");
       setPasswordEtud("");
       setConfirmPassword("");
+      setRole("");
 
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      setApiError(error.response.data || "Une erreur s'est produite. Veuillez réessayer.");
-      
+      setApiError(
+        error.response.data || "Une erreur s'est produite. Veuillez réessayer."
+      );
+
       setTimeout(() => setApiError(""), 3000);
     }
   };
@@ -59,14 +81,12 @@ const AddEtud = () => {
         Ajouter des utilisateurs
       </Typography>
 
-      {/* Display success message */}
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2, textAlign: "center" }}>
           {successMessage}
         </Alert>
       )}
 
-      {/* Display API error message */}
       {apiError && (
         <Alert severity="error" sx={{ mb: 2, textAlign: "center" }}>
           {apiError}
@@ -86,9 +106,42 @@ const AddEtud = () => {
           boxShadow: 2,
         }}
       >
-        <TextField label="Prénom" value={firstNameEtud} onChange={(e) => setFirstNameEtud(e.target.value)} required />
-        <TextField label="Nom" value={lastNameEtud} onChange={(e) => setLastNameEtud(e.target.value)} required />
-        <TextField label="Email" type="email" value={emailEtud} onChange={(e) => setEmailEtud(e.target.value)} required />
+        <TextField
+          label="Prénom"
+          value={firstNameEtud}
+          onChange={(e) => setFirstNameEtud(e.target.value)}
+          required
+        />
+        <TextField
+          label="Nom"
+          value={lastNameEtud}
+          onChange={(e) => setLastNameEtud(e.target.value)}
+          required
+        />
+        <TextField
+          label="Email"
+          type="email"
+          value={emailEtud}
+          onChange={(e) => setEmailEtud(e.target.value)}
+          required
+        />
+
+        <FormControl required>
+          <InputLabel id="role-label">Rôle</InputLabel>
+          <Select
+            labelId="role-label"
+            id="demo-simple-select"
+            value={role}
+            label="Rôle"
+            onChange={handleRole}
+          >
+            {roles.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <TextField
           label="Mot de passe"
@@ -99,7 +152,10 @@ const AddEtud = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -118,7 +174,10 @@ const AddEtud = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                <IconButton
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  edge="end"
+                >
                   {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -126,7 +185,13 @@ const AddEtud = () => {
           }}
         />
 
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3 }}
+          fullWidth
+        >
           Ajouter
         </Button>
       </Box>
@@ -134,4 +199,4 @@ const AddEtud = () => {
   );
 };
 
-export default AddEtud;
+export default AddUsers;

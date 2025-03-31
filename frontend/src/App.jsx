@@ -12,6 +12,7 @@ import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/auth/controll/protectedRoute";
 import Stagecomponent from "./components/Stage/Stagecomponent";
 import NewsAdmin from "./components/News/NewsAdmin";
+import ManageUsers from "./components/Admin/ManageUsers";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route index element={<Main />} />
             <Route path="addNews" element={<NewsAdmin />} />
             <Route path="add" element={<AdminPage />} />
+            <Route path="manage" element={<ManageUsers />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
           </Route>

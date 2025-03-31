@@ -32,7 +32,7 @@ const pages = [
   {id: 6, title: "Stages", lien :"/espace-eilco/stages"}
 ];
 
-const settings = ["Profile", "Ajouter Compte", "Ajouter News", "Logout"];
+const settings = ["Profile", "Gestion Compte", "Ajouter News", "Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -69,8 +69,8 @@ function Navbar() {
       } else {
         console.error("Logout failed");
       }
-    } else if (setting === "Ajouter Compte") {
-      navigate("/espace-admin/add");
+    } else if (setting === "Gestion Compte") {
+      navigate("/espace-admin/manage");
     }
   };
 
@@ -256,7 +256,7 @@ function Navbar() {
                 >
                   {role != "ADMIN" ? (
                     <Typography textAlign="center">
-                      {setting != "Ajouter Compte" && setting != "Ajouter News"
+                      {setting != "Gestion Compte" && setting != "Ajouter News"
                         ? setting
                         : null}
                         </Typography>
