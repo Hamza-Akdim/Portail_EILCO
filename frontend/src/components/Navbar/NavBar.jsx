@@ -29,7 +29,8 @@ const pages = [
   { id: 3, title: "Moodle", lien: "https://portail.eilco.fr:28/" },
   { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
   { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
-  {id: 6, title: "Stages", lien :"/espace-eilco/stages"}
+  {id: 6, title: "Stages", lien :"/espace-eilco/stages"},
+  {id: 7, title: "Services", lien :"/espace-eilco/services"}
 ];
 */
 
