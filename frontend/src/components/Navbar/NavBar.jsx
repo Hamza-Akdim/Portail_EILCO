@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { getUserDetails, logout } from "../../utils/apiFunctions";
-
+/*
 const pages = [
   { id: 0, title: "Home", lien: "/espace-eilco" },
   {
@@ -31,6 +31,8 @@ const pages = [
   { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
   {id: 6, title: "Stages", lien :"/espace-eilco/stages"}
 ];
+*/
+
 
 const settings = ["Profile", "Ajouter Compte", "Ajouter News", "Logout"];
 
@@ -54,7 +56,26 @@ function Navbar() {
         console.log(`Error while fetchinf the user data : ${err}`)
       );
   }, [firstname, lastname, email]);
+    const allPages = [
+        { id: 0, title: "Home", lien: "/espace-eilco" },
+        {
+            id: 1,
+            title: "Emploi du temps",
+            lien: "https://edt.univ-littoral.fr/direct/index.jsp?data=...",
+        },
+        { id: 2, title: "NextCloud", lien: "https://cloudeilco.univ-littoral.fr/index.php/login" },
+        { id: 3, title: "Moodle", lien: "https://portail.eilco.fr:28/" },
+        { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
+        { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
+        { id: 6, title: "Stages", lien: "/espace-eilco/stages" },
+    ];
 
+// Ajouter une page si le rôle est ADMIN ou EDITEUR
+    if (role === "ADMIN" || role === "EDITEUR") {
+        allPages.push({ id: 7, title: "Ajouter Contacts", lien: "/espace-admin/add-contact" });
+    }
+
+    const pages = allPages;
   const navigate = useNavigate();
 
   const handleUserMenuClick = async (setting) => {

@@ -35,12 +35,33 @@ function Main() {
             >
                 <Box
                     sx={{
+                        position: "relative",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         borderRadius: 2,
+                        overflow: "hidden",
+                        p: 0,
+                        height: { lg: "300px" },
+                        marginTop: { lg: "120px" }
                     }}
                 >
+                    {/* Fond avec effet de verre */}
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            background: "linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))", // Dégradé subtil
+                            WebkitBackdropFilter: "blur(10px) brightness(90%)", // Pour Safari/Chrome
+                            backdropFilter: "blur(10px) brightness(90%)", // Standard
+                            zIndex: -1
+                        }}
+                    />
+
+                    {/* Contenu */}
                     <Weather />
                 </Box>
                 {newsList && newsList.length > 0 ? (

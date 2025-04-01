@@ -1,11 +1,50 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL :"http://localhost:8081",
-    withCredentials: true,  
-})
+    baseURL: "http://localhost:8081/", // tu peux Utiliser le proxy Vite
+    withCredentials: true,
+});
 
+export const getContacts = async (endpoint) => {
+    try {
+        const response = await api.get(`api/contacts${endpoint}`);
+        return response.data;
+    } catch (error) {
+        console.error("Erreur contacts :", error);
+        throw error;
+    }
+};
 
+export const postContacts = async (data) => {
+    try {
+        const response = await api.post("api/contacts", data);
+        return response.data;
+    } catch (error) {
+        console.error("Erreur contacts :", error);
+        throw error;
+    }
+};
+const CONTACT_URL = "http://localhost:8081/api/contacts";
+/*
+export const getContacts = async (endpoint = "") => {
+    try {
+        const response = await axios.get(`${CONTACT_URL}${endpoint}`);
+        return response.data;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des contacts :", error);
+        throw error;
+    }
+};
+
+export const postContacts = async (data) => {
+    try {
+        const response = await axios.post(CONTACT_URL, data);
+        return response.data;
+    } catch (error) {
+        console.error("Erreur lors de l'envoi des contacts :", error);
+        throw error;
+    }
+};*/
 export const auth = async (email, password) => {
     const requestBody = {
         email: email,

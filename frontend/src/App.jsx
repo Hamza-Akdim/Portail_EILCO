@@ -12,6 +12,7 @@ import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/auth/controll/protectedRoute";
 import Stagecomponent from "./components/Stage/Stagecomponent";
 import NewsAdmin from "./components/News/NewsAdmin";
+import AddContactPage from "./pages/AddContactPage.jsx";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="add" element={<AdminPage />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
+            <Route path="add-contact" element={<AddContactPage />} />
           </Route>
         </Route>
       </Routes>
