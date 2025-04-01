@@ -16,10 +16,8 @@ const StageCompletionInfo = () => (
       alignItems: 'center',
       textAlign: 'center',
     }}>
-      <Typography variant="h4" fontWeight="bold" color="primary.main" gutterBottom>
-      Vous avez trouvé un stage ? 
-      </Typography>
-
+      
+      <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Vous avez trouvé un stage ?</h2>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
         Voici ce que vous devez faire maintenant pour finaliser votre stage.
       </Typography>

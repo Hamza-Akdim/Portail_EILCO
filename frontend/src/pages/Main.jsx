@@ -2,15 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Container, Box, Typography } from "@mui/material";
 import Weather from "../components/weather/Weather";
 import NewsList from "../components/News/NewsList";
-import { getNews } from "../utils/apiFunctions";
+import { getNews, getUserDetails } from "../utils/apiFunctions";
 import NewsAdmin from "../components/News/NewsAdmin";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import ServicesPage from "../components/EilcoServices/ServicesPage";
 function Main() {
     const [newsList, setNewsList] = useState([]);
     const navigate = useNavigate();
+    const [role, setRole] = useState("");
+      
     useEffect(() => {
         loadNews();
+        getUserDetails()
+          .then((result) => {
+            setRole(result.role);
+            console.log(role);
+          })
+          .catch((err) =>
+            console.log(`Error while fetchinf the user data : ${err}`)
+          );
     }, []);
     const handleNavigateToNewsAdmin = () => {
         navigate("/espace-admin/news-admin");
@@ -51,7 +62,7 @@ function Main() {
                     </Typography>
                 )}
             </Box>
-            <Box display="flex" justifyContent="center" mt={3}>
+            {(role == "ADMIN"|| role == "EDITEUR") && (<Box display="flex" justifyContent="center" mt={3}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -59,7 +70,7 @@ function Main() {
                 >
                     Accéder à l'administration des nouvelles
                 </Button>
-            </Box>
+            </Box>)}
         </Container>
     );
 }

@@ -12,6 +12,7 @@ import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/auth/controll/protectedRoute";
 import Stagecomponent from "./components/Stage/Stagecomponent";
 import NewsAdmin from "./components/News/NewsAdmin";
+import ServicesPage from "./components/EilcoServices/ServicesPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="update-todo/:id" element={<TodoComponent />} />
           <Route path="profile" element={<Profile />} />
           <Route path="stages" element={<Stagecomponent />} />
+          <Route path="services" element={<ServicesPage />} />
         </Route>
 
         <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
