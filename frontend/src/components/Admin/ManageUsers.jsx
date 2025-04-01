@@ -20,7 +20,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Edit, Delete, PersonAdd, Search } from "@mui/icons-material";
-import { getAllUsers } from "../../utils/apiFunctions";
+import { getAllUsers, getUserByEmail } from "../../utils/apiFunctions";
 import { useNavigate } from "react-router-dom";
 
 const roleColors = {
@@ -40,14 +40,13 @@ const ManageUsers = () => {
 
   const navigate = useNavigate();
 
-
-  const fetchUsers = async () => {
-    const data = await getAllUsers(page, rowsPerPage);
-    setUsers(data.data);
-    setPageTotal(data.total);
-  };
-
   useEffect(() => {
+    const fetchUsers = async () => {
+      const data = await getAllUsers(page, rowsPerPage);
+      setUsers(data.data);
+      setPageTotal(data.total);
+    };
+
     fetchUsers();
   }, [page, rowsPerPage]);
 
@@ -75,9 +74,29 @@ const ManageUsers = () => {
     setPage(0); // Reset to first page when rows per page changes
   };
 
-  const handleButton = ()=>{
-    navigate("/espace-admin/add"); 
-  }
+  const handleButton = () => {
+    navigate("/espace-admin/add");
+  };
+
+  const searchUser = async (e) => {
+    const query = e.target.value;
+    setSearchTerm(query);
+  
+    if (query.length > 0) {  // Avoid searching when input is empty
+      try {
+        const data = await getUserByEmail(query); // Fetch users by email
+        setUsers(data); // Update users state with filtered results
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setUsers([]); // If error occurs, reset users list
+      }
+    } else {
+      // If search input is empty, refetch all users
+      const allUsers = await getAllUsers(page, rowsPerPage);
+      setUsers(allUsers.data);
+    }
+  };
+  
 
   return (
     <Container component="main" maxWidth="lg" sx={{ py: 4, px: 2 }}>
@@ -99,7 +118,7 @@ const ManageUsers = () => {
           variant="standard"
           label="Rechercher par email"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={searchUser}
           sx={{ width: "250px", marginBottom: "10px" }}
           InputProps={{
             startAdornment: (
@@ -165,48 +184,47 @@ const ManageUsers = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
-              .map((user) => (
-                <TableRow key={user.id} hover>
-                  <TableCell>{user.firstname}</TableCell>
-                  <TableCell>{user.lastname}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <span
-                      style={{
-                        backgroundColor: roleColors[user.role],
-                        color: "white",
-                        padding: "6px 12px",
-                        borderRadius: "12px",
-                        display: "inline-block",
-                        width: "100px",
-                        textAlign: "center",
-                        fontSize: "14px",
-                      }}
+            {users.map((user) => (
+              <TableRow key={user.id} hover>
+                <TableCell>{user.firstname}</TableCell>
+                <TableCell>{user.lastname}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <span
+                    style={{
+                      backgroundColor: roleColors[user.role],
+                      color: "white",
+                      padding: "6px 12px",
+                      borderRadius: "12px",
+                      display: "inline-block",
+                      width: "100px",
+                      textAlign: "center",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {user.role.toLowerCase()}
+                  </span>
+                </TableCell>
+                <TableCell align="center">
+                  <Tooltip title="Modifier">
+                    <IconButton
+                      sx={{ color: "#004f8b" }}
+                      onClick={() => handleEdit(user)}
                     >
-                      {user.role.toLowerCase()}
-                    </span>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Tooltip title="Modifier">
-                      <IconButton
-                        sx={{ color: "#004f8b" }}
-                        onClick={() => handleEdit(user)}
-                      >
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Supprimer">
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(user.id)}
-                      >
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Supprimer">
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -222,8 +240,9 @@ const ManageUsers = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Lignes par page"
-          labelDisplayedRows={({ from, to, count }) => `${from}–${to} sur ${count}`}
-          
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}–${to} sur ${count}`
+          }
           sx={{
             "& .MuiTablePagination-toolbar": {
               padding: "0px",

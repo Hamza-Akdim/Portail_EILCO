@@ -57,17 +57,25 @@ export const logout = async () => {
 };
 
 export const getAllUsers = async (page, size) => {
-  console.log("page : ", page, "size : ", size)
   try {
     const paramsConfig = {
-        page : page,
-        size : size
-    }
+      page: page,
+      size: size,
+    };
 
-    const response = await api.get("/api/users", {params : paramsConfig});
+    const response = await api.get("/api/users", { params: paramsConfig });
+    return { data: response.data.data, total: response.data.total };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  try {
+    const response = await api.get("/api/users/search", { params: {email: email} });
     console.log(response)
-    return {data : response.data.data, total : response.data.total};
-    
+    return response.data;
   } catch (error) {
     console.log(error);
     return null;

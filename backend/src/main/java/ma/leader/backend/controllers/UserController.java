@@ -64,11 +64,13 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
-        User user = userService.getUserByEmail(email);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getRole());
+    public ResponseEntity<List<UserResponse>> getUserByEmail(@RequestParam String email) {
+        List<User> users = userService.getUserByEmailRegex(email);
+        List<UserResponse> userResponses = users.stream().map(user -> {
+            return new UserResponse(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getRole());
+        }).toList();
 
-        return ResponseEntity.ok(userResponse);
+        return ResponseEntity.ok(userResponses);
     }
 
     @DeleteMapping("/{id}")

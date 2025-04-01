@@ -44,9 +44,11 @@ const Login = () => {
           navigate("espace-eilco");
         } else if (email.includes("@admin")) {
           navigate("espace-admin");
+        } else if (email.includes("@edit")) {
+          navigate("/espace-editeur"); 
         } else {
-          navigate("/"); 
-        }      
+          navigate("/");
+        }
       }
     } catch (error) {
       if (error.response) {

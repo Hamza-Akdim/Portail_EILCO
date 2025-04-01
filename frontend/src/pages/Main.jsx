@@ -12,7 +12,7 @@ function Main() {
         loadNews();
     }, []);
     const handleNavigateToNewsAdmin = () => {
-        navigate("/espace-admin/news-admin");
+        navigate("/espace-editeur/news-admin");
     };
     const loadNews = async () => {
         try {

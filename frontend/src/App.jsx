@@ -47,6 +47,17 @@ function App() {
             <Route path="news-admin" element={<NewsAdmin />} />
           </Route>
         </Route>
+
+        <Route element={<ProtectedRoute requiredRole="EDITEUR" />}>
+          <Route path="/espace-editeur" element={<AppLayout />}>
+            <Route index element={<Main />} />
+            <Route path="addNews" element={<NewsAdmin />} />
+            {/* <Route path="add" element={<AdminPage />} /> */}
+            {/* <Route path="manage" element={<ManageUsers />} /> */}
+            <Route path="profile" element={<Profile />} />
+            <Route path="news-admin" element={<NewsAdmin />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
