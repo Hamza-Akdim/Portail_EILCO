@@ -63,7 +63,7 @@ const AddContactPage = () => {
         try {
             await postContacts(formData);
             alert("Contacts ajoutés !");
-            navigate("/contacts");
+            navigate("/espace-eilco");
         } catch (error) {
             alert("Erreur lors de l'ajout");
         }
