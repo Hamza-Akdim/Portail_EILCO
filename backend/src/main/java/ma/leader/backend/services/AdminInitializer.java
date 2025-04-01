@@ -2,6 +2,7 @@ package ma.leader.backend.services;
 
 import lombok.RequiredArgsConstructor;
 import ma.leader.backend.entities.User;
+import ma.leader.backend.enums.UserRole;
 import ma.leader.backend.repositories.UserRepository;
 import ma.leader.backend.requests.SignupRequest;
 import org.springframework.boot.CommandLineRunner;
@@ -32,7 +33,8 @@ public class AdminInitializer implements CommandLineRunner {
                     "admin",
                     "equipe dev",
                     adminEmail,
-                    adminPassword
+                    adminPassword,
+                    "ADM"
             );
 
             authService.registreUser(adminRequest);

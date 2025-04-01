@@ -3,7 +3,6 @@ import { Container, Box, Typography } from "@mui/material";
 import Weather from "../components/weather/Weather";
 import NewsList from "../components/News/NewsList";
 import { getNews } from "../utils/apiFunctions";
-import NewsAdmin from "../components/News/NewsAdmin";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 function Main() {
@@ -13,7 +12,7 @@ function Main() {
         loadNews();
     }, []);
     const handleNavigateToNewsAdmin = () => {
-        navigate("/espace-admin/news-admin");
+        navigate("/espace-editeur/news-admin");
     };
     const loadNews = async () => {
         try {
@@ -78,7 +77,7 @@ function Main() {
                     color="primary"
                     onClick={handleNavigateToNewsAdmin}  // Utilisation correcte de la fonction de navigation
                 >
-                    Accéder à l'administration des nouvelles
+                    {"Accéder à l'administration des nouvelles"}
                 </Button>
             </Box>
         </Container>

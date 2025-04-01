@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getNews } from '../utils/apiFunctions';
 import { Container, Box, Typography } from "@mui/material";
-import Weather from '../components/weather/Weather';
-import NewsList from '../components/News/NewsList';
-import AddEtud from '../components/Admin/AddEtud';
+import AddUsers from '../components/Admin/AddUsers';
 
 
 const AdminPage = () => {
@@ -49,7 +47,7 @@ const AdminPage = () => {
                     </Typography>
                 )}
             </Box> */}
-            <AddEtud />
+            <AddUsers />
         </Container>
     );
 }

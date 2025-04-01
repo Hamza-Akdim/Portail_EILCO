@@ -54,9 +54,12 @@ public class AuthController {
             response.addCookie(jwtCookie);
 
             return ResponseEntity.ok("Registration is successed");
+        } catch (UserAlreadyExists e) {
+            return ResponseEntity.status(404).body("Error: This email already exists");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: This email already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: " + e.getMessage());
         }
+
     }
 
 

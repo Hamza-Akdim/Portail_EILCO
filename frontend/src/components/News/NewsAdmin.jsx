@@ -178,9 +178,9 @@ const NewsAdmin = () => {
                 />
                 <CardContent>
                   <Typography variant="h6">{news.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  {/* <Typography variant="body2" color="text.secondary">
                     {news.content}
-                  </Typography>
+                  </Typography> */}
                   <Typography variant="caption">{news.category}</Typography>
                 </CardContent>
                 <div style={{ textAlign: "right", padding: "8px" }}>

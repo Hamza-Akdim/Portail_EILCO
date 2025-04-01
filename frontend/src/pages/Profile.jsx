@@ -21,11 +21,11 @@ const Profile = () => {
       );
   }, [firstname, lastname, email]);
 
+  
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow">
-
         <div
           className="w-full h-56 bg-cover bg-center relative"
           style={{
