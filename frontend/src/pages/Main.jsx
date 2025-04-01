@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Container, Box, Typography } from "@mui/material";
 import Weather from "../components/weather/Weather";
 import NewsList from "../components/News/NewsList";
-import { getNews } from "../utils/apiFunctions";
 import { getNews, getUserDetails } from "../utils/apiFunctions";
 import NewsAdmin from "../components/News/NewsAdmin";
 import { useNavigate } from "react-router-dom";

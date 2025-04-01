@@ -69,6 +69,8 @@ function Navbar() {
         { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
         { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
         { id: 6, title: "Stages", lien: "/espace-eilco/stages" },
+        {id: 7, title: "Services", lien :"/espace-eilco/services"}
+
     ];
 
 // Ajouter une page si le rôle est ADMIN ou EDITEUR
@@ -112,7 +114,7 @@ function Navbar() {
 
   return (
     <AppBar position="fixed">
-      <Container maxWidth={false} sx={{}}>
+      <Container maxWidth={false} sx={{}} className="bg-eilco-blue shadow-none">
         <Toolbar
           disableGutters
           sx={{

@@ -48,6 +48,9 @@ function App() {
             <Route path="manage" element={<ManageUsers />} />
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
+            <Route path="add-contact" element={<AddContactPage />} />
+            <Route path="services" element={<ServicesPage />} />
+
           </Route>
         </Route>
 
@@ -59,6 +62,7 @@ function App() {
             {/* <Route path="manage" element={<ManageUsers />} /> */}
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
+            <Route path="services" element={<ServicesPage />} />
           </Route>
         </Route>
       </Routes>
