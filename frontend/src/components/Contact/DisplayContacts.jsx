@@ -5,24 +5,26 @@ function DisplayContacts({ data }) {
         <div className="space-y-4">
             <ContactSection
                 title="Directeur"
-                name={data.directeur.nom}
-                email={data.directeur.email}
+                name={data.contacts.find(c => c.role === 'DIRECTOR')?.name}
+                email={data.contacts.find(c => c.role === 'DIRECTOR')?.email}
             />
             <ContactSection
                 title="Secrétaire"
-                name={data.secretaire.nom}
-                email={data.secretaire.email}
+                name={data.contacts.find(c => c.role === 'SECRETARY')?.name}
+                email={data.contacts.find(c => c.role === 'SECRETARY')?.email}
             />
             <div className="mt-6">
                 <h2 className="text-xl font-semibold mb-4">Enseignants</h2>
                 <div className="space-y-3">
-                    {data.professeurs.map((prof, index) => (
-                        <ContactSection
-                            key={index}
-                            name={prof.nom}
-                            email={prof.email}
-                        />
-                    ))}
+                    {data.contacts
+                        .filter(c => c.role === 'PROFESSOR')
+                        .map((prof, index) => (
+                            <ContactSection
+                                key={index}
+                                name={prof.name}
+                                email={prof.email}
+                            />
+                        ))}
                 </div>
             </div>
         </div>

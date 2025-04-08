@@ -38,7 +38,7 @@ export default function StageRoadmap() {
         console.log(role);
       })
       .catch((err) =>
-        console.log(`Error while fetchinf the user data : ${err}`)
+        console.log(`Erreur lors de la récupération des données utilisateur : ${err}`)
       );
   }, []);
 

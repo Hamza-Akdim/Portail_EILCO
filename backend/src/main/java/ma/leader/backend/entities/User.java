@@ -3,15 +3,16 @@ package ma.leader.backend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import ma.leader.backend.enums.UserRole;
+import java.util.List;
 
-/**
- * @author akdim
- */
 @Entity
+@Table(name = "users")
 @Setter
 @Getter
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,4 +27,8 @@ public class User {
     private String encryptedPassword;
 
     private UserRole role;
+
+    // New bi-directional mapping: One user has many todos.
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Todo> todos;
 }

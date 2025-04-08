@@ -17,16 +17,16 @@ function Footer() {
         <Grid2 container spacing={8}>
           <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              About Us
+              À propos
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              École d’Ingénieurs du Littoral Côte d’Opale – 50 Rue Ferdinand
+              École d'Ingénieurs du Littoral Côte d'Opale – 50 Rue Ferdinand
               Buisson
             </Typography>
           </Grid2>
           <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              Contact Us
+              Contact
             </Typography>
             <Typography variant="body2" color="text.secondary">
               CS 30613 – 62228 CALAIS CEDEX
@@ -35,12 +35,12 @@ function Footer() {
               Email: Contact@eilco.com
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Phone: +33 3 21 17 10 05
+              Téléphone: +33 3 21 17 10 05
             </Typography>
           </Grid2>
           <Grid2 item xs={12} sm={4}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              Follow Us
+              Suivez-nous
             </Typography>
             <Link
               href="https://www.facebook.com/eilco.ulco/?locale=fr_FR"

@@ -14,6 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"city", "academicLevel"})
+})
 public class ContactEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

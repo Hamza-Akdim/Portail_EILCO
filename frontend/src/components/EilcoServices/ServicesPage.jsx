@@ -159,7 +159,7 @@ const services = [
         clubs: [
           "EILTECH' - Club informatique et technologie",
           "EILCORIENTAL - Club de présentation de la culture orienta et nord africaine",
-          "Eilco’taku - Club culture asiatique",
+          "Eilco'taku - Club culture asiatique",
           "BDA - Bureau des arts",
           "Ch'tis Gamers - Club jeux vidéo",
           "D10Cassé - Club jeu de rôle"
@@ -203,7 +203,7 @@ const services = [
     titre: "Alternance et Relations Entreprises",
     description: [
       {
-        role: "Secrétariat de l’Alternance et des Relations Entreprises",
+        role: "Secrétariat de l'Alternance et des Relations Entreprises",
         name: "Martine LEHEUDRE",
         contact: "03 21 38 85 56 (Saint-Omer)",
         email: "secretariat-re@eilco.univ-littoral.fr",
@@ -219,7 +219,7 @@ const services = [
         details: "Suivi, développement et contractualisation des formations en alternance et contrats de professionnalisation."
       },
       {
-        role: "Chargé du Développement de l’Apprentissage",
+        role: "Chargé du Développement de l'Apprentissage",
         name: "Christophe DEZEURE",
         contact: "03 21 17 10 08 (Calais)",
         email: "apprentissage-fisea@eilco.univ-littoral.fr",
@@ -227,7 +227,7 @@ const services = [
         details: "Développement des partenariats pour l'apprentissage, organisation de stages et accompagnement des étudiants."
       },
       {
-        role: "Secrétaire Pédagogique de l’Apprentissage",
+        role: "Secrétaire Pédagogique de l'Apprentissage",
         name: "Anna LHERBIER",
         contact: "03 21 17 10 02 (Calais)",
         email: "anna.lherbier@eilco.univ-littoral.fr",

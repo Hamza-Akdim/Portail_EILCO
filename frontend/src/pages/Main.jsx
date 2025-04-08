@@ -3,10 +3,9 @@ import { Container, Box, Typography } from "@mui/material";
 import Weather from "../components/weather/Weather";
 import NewsList from "../components/News/NewsList";
 import { getNews, getUserDetails } from "../utils/apiFunctions";
-import NewsAdmin from "../components/News/NewsAdmin";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import ServicesPage from "../components/EilcoServices/ServicesPage";
+
 function Main() {
   const [newsList, setNewsList] = useState([]);
   const navigate = useNavigate();
@@ -20,18 +19,22 @@ function Main() {
         console.log(role);
       })
       .catch((err) =>
-        console.log(`Error while fetchinf the user data : ${err}`)
+        console.log(`Erreur lors de la récupération des données utilisateur : ${err}`)
       );
   }, []);
   const handleNavigateToNewsAdmin = () => {
-    navigate("/espace-editeur/news-admin");
+    if (role === "ADMIN") {
+      navigate("/espace-admin/news-admin");
+    } else if (role === "EDITEUR") {
+      navigate("/espace-editeur/news-admin");
+    }
   };
   const loadNews = async () => {
     try {
       const news = await getNews();
       setNewsList(news);
     } catch (error) {
-      console.error("Erreur lors du chargement des news", error);
+      console.error("Erreur lors du chargement des actualités", error);
     }
   };
 
@@ -63,13 +66,15 @@ function Main() {
         )}
       </Box>
       <Box display="flex" justifyContent="center" mt={3}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNavigateToNewsAdmin} // Utilisation correcte de la fonction de navigation
-        >
-          {"Accéder à l'administration des nouvelles"}
-        </Button>
+        {(role === "ADMIN" || role === "EDITEUR") && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleNavigateToNewsAdmin}
+          >
+            Accéder à l'administration des nouvelles
+          </Button>
+        )}
       </Box>
     </Container>
   );

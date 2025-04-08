@@ -35,7 +35,7 @@ const pages = [
 */
 
 
-const settings = ["Profile", "Gestion Compte", "Ajouter News", "Logout"];
+const settings = ["Profil", "Gestion Compte", "Ajouter News", "Déconnexion"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -48,17 +48,30 @@ function Navbar() {
   React.useEffect(() => {
     getUserDetails()
       .then((result) => {
-        setFirstname(result.firstName);
-        setLastname(result.lastName);
-        setEmail(result.email);
-        setRole(result.role);
+        if (result) {
+          setFirstname(result.firstName);
+          setLastname(result.lastName);
+          setEmail(result.email);
+          setRole(result.role);
+        } else {
+          // Handle case when user is not authenticated
+          setFirstname("");
+          setLastname("");
+          setEmail("");
+          setRole("");
+        }
       })
-      .catch((err) =>
-        console.log(`Error while fetchinf the user data : ${err}`)
-      );
-  }, [firstname, lastname, email]);
+      .catch((err) => {
+        console.log(`Error while fetching the user data : ${err}`);
+        // Reset user data on error
+        setFirstname("");
+        setLastname("");
+        setEmail("");
+        setRole("");
+      });
+  }, []);
     const allPages = [
-        { id: 0, title: "Home", lien: "/espace-eilco" },
+        { id: 0, title: "Accueil", lien: "/espace-eilco" },
         {
             id: 1,
             title: "Emploi du temps",
@@ -69,13 +82,12 @@ function Navbar() {
         { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
         { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
         { id: 6, title: "Stages", lien: "/espace-eilco/stages" },
-        {id: 7, title: "Services", lien :"/espace-eilco/services"}
-
+        { id: 7, title: "Services", lien: "/espace-eilco/services" }
     ];
 
 // Ajouter une page si le rôle est ADMIN ou EDITEUR
     if (role === "ADMIN" || role === "EDITEUR") {
-        allPages.push({ id: 7, title: "Ajouter Contacts", lien: "/espace-admin/add-contact" });
+        allPages.push({ id: 8, title: "Ajouter Contacts", lien: "/espace-admin/add-contact" });
     }
 
     const pages = allPages;
@@ -84,14 +96,14 @@ function Navbar() {
   const handleUserMenuClick = async (setting) => {
     handleCloseUserMenu();
 
-    if (setting === "Profile") {
+    if (setting === "Profil") {
       navigate("/espace-eilco/profile");
-    } else if (setting === "Logout") {
+    } else if (setting === "Déconnexion") {
       const response = await logout();
       if (response) {
         navigate("/");
       } else {
-        console.error("Logout failed");
+        console.error("La déconnexion a échoué");
       }
     } else if (setting === "Gestion Compte") {
       navigate("/espace-admin/manage");

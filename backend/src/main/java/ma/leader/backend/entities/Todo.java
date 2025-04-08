@@ -1,10 +1,7 @@
 package ma.leader.backend.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
@@ -23,5 +20,12 @@ public class Todo {
 
     @Column(nullable = false)
     private String description;
+
     private boolean completed;
+
+    // Many todos belong to one User.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+            nullable = false, foreignKey = @ForeignKey(name = "FK_TODO_USER"))
+    private User user;
 }

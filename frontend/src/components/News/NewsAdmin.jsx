@@ -150,7 +150,7 @@ const NewsAdmin = () => {
         </Grid>
         <Grid item xs={12}>
           <Button variant="contained" fullWidth onClick={handleAddNews} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : "Ajouter une news"}
+            {loading ? <CircularProgress size={24} /> : "Ajouter une nouvelle"}
           </Button>
         </Grid>
       </Grid>
@@ -236,7 +236,7 @@ const NewsAdmin = () => {
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Annuler</Button>
           <Button onClick={handleUpdateNews} variant="contained" disabled={loading}>
-            Sauvegarder
+            Enregistrer
           </Button>
         </DialogActions>
       </Dialog>

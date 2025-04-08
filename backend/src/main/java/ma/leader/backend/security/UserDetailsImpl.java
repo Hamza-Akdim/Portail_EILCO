@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * @author akdim
- */
+
 @Getter
 @Setter
 @AllArgsConstructor

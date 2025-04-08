@@ -11,14 +11,10 @@ const CITY_OPTIONS = [
 ];
 
 const ACADEMIC_LEVELS = {
-    Calais: [
+
+    default: [
         "1ère Année Préparatoire",
         "2ème Année Préparatoire",
-        "1ère Année en Cycle Ingénieur",
-        "2ème Année en Cycle Ingénieur",
-        "3ème Année en Cycle Ingénieur"
-    ],
-    default: [
         "1ère Année en Cycle Ingénieur",
         "2ème Année en Cycle Ingénieur",
         "3ème Année en Cycle Ingénieur"
@@ -38,9 +34,7 @@ const AddContactPage = () => {
 
     const getLevelOptions = () => {
         if (!formData.city) return [];
-        return ["Calais", "Boulogne sur Mer"].includes(formData.city)
-            ? ACADEMIC_LEVELS.Calais
-            : ACADEMIC_LEVELS.default;
+        return ACADEMIC_LEVELS.default;
     };
     const handleAddProfessor = () => {
         setFormData({

@@ -5,19 +5,32 @@ import { getUserDetails } from "../../../utils/apiFunctions";
 const ProtectedRoute = ({ requiredRole }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchUser = async () => {
-    const userData = await getUserDetails();
-    setUser(userData);
-    setLoading(false);
+    try {
+      const userData = await getUserDetails();
+      setUser(userData);
+      setError(null);
+    } catch (err) {
+      setError(err);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   };
   
   useEffect(() => {
     fetchUser();
   }, []);
 
-  //TO FOX AFTER
-  if (loading) return <p></p>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <Navigate to="/" replace />;
+  }
 
   if (!user || user.role !== requiredRole) {
     return <Navigate to="/" replace />;
