@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface TodoService {
 
-    TodoDto addTodo(TodoDto todoDto);
+    TodoDto addTodo(TodoDto todoDto, Long userId);
 
-    TodoDto getTodo(Long id);
+    TodoDto getTodo(Long id, Long userId);
 
-    List<TodoDto> getAllTodos();
+    List<TodoDto> getAllTodosByUserId(Long userId);
 
-    TodoDto updateTodo(TodoDto todoDto, Long id);
+    TodoDto updateTodo(TodoDto todoDto, Long id, Long userId);
 
-    void deleteTodo(Long id);
+    void deleteTodo(Long id, Long userId);
 
-    TodoDto completeTodo(Long id);
+    TodoDto completeTodo(Long id, Long userId);
 
-    TodoDto inCompleteTodo(Long id);
+    TodoDto inCompleteTodo(Long id, Long userId);
 }

@@ -14,13 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RequiredArgsConstructor
 @Slf4j
 public class NewsController {
 
     private final NewsService newsService;
-
     @GetMapping
     public ResponseEntity<List<News>> getAllNews() {
         return ResponseEntity.ok(newsService.getAllNews());

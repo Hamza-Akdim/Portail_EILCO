@@ -4,14 +4,14 @@ function EditSection({ title, data, onChange }) {
             {title && <h3 className="font-medium mb-3">{title}</h3>}
             <input
                 type="text"
-                value={data.nom || ""}
-                onChange={(e) => onChange("nom", e.target.value)}
+                value={data?.name || ""}
+                onChange={(e) => onChange("name", e.target.value)}
                 placeholder="Nom"
                 className="block w-full p-2 mb-2 border rounded-md border-gray-300"
             />
             <input
                 type="email"
-                value={data.email || ""}
+                value={data?.email || ""}
                 onChange={(e) => onChange("email", e.target.value)}
                 placeholder="Email"
                 className="block w-full p-2 border rounded-md border-gray-300"

@@ -1,50 +1,40 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "http://localhost:8081/", // tu peux Utiliser le proxy Vite
-    withCredentials: true,
+  baseURL: "http://localhost:8081/", // tu peux Utiliser le proxy Vite
+  withCredentials: true,
 });
 
 export const getContacts = async (endpoint) => {
-    try {
-        const response = await api.get(`api/contacts${endpoint}`);
-        return response.data;
-    } catch (error) {
-        console.error("Erreur contacts :", error);
-        throw error;
-    }
+  try {
+    const response = await api.get(`api/contacts${endpoint}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur contacts :", error);
+    throw error;
+  }
 };
 
 export const postContacts = async (data) => {
-    try {
-        const response = await api.post("api/contacts", data);
-        return response.data;
-    } catch (error) {
-        console.error("Erreur contacts :", error);
-        throw error;
-    }
-};
-const CONTACT_URL = "http://localhost:8081/api/contacts";
-/*
-export const getContacts = async (endpoint = "") => {
-    try {
-        const response = await axios.get(`${CONTACT_URL}${endpoint}`);
-        return response.data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des contacts :", error);
-        throw error;
-    }
+  try {
+    const response = await api.post("api/contacts", data);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur contacts :", error);
+    throw error;
+  }
 };
 
-export const postContacts = async (data) => {
-    try {
-        const response = await axios.post(CONTACT_URL, data);
-        return response.data;
-    } catch (error) {
-        console.error("Erreur lors de l'envoi des contacts :", error);
-        throw error;
-    }
-};*/
+export const updateContacts = async (city, level, data) => {
+  try {
+    const response = await api.put(`api/contacts/${city}/${level}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating contacts:", error);
+    throw error;
+  }
+};
+
 export const auth = async (email, password) => {
   const requestBody = {
     email: email,
@@ -79,8 +69,16 @@ export const signUp = async (firstName, lastName, email, password, role) => {
 export const getUserDetails = async () => {
   try {
     const response = await api.get("api/auth/me");
-    return response.data;
+    if (response.status === 200 && response.data) {
+      return response.data;
+    }
+    return null;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      // Token is invalid or expired
+      console.log("Authentication required. Please log in.");
+      return null;
+    }
     console.error("Failed to fetch user details", error);
     return null;
   }
@@ -113,8 +111,10 @@ export const getAllUsers = async (page, size) => {
 
 export const getUserByEmail = async (email) => {
   try {
-    const response = await api.get("/api/users/search", { params: {email: email} });
-    console.log(response)
+    const response = await api.get("/api/users/search", {
+      params: { email: email },
+    });
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -122,60 +122,55 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export const updateUser = async (newFirstname, newLastname, email, newRole, newPassword, id) => {
+export const updateUser = async (
+  newFirstname,
+  newLastname,
+  email,
+  newRole,
+  newPassword,
+  id
+) => {
   try {
-    
-    const setRole = ()=>{
-      if(newRole==="ETUDIANT")
-        return "ETUD"
-      else if(newRole==="PROFESSEUR")
-        return "PROF";
-      else if(newRole==="EDITEUR")
-        return "EDIT";
-      else if (newRole==="ADMIN")
-        return "ADM";
-      else
-        return null;
-    }
-    
+    const setRole = () => {
+      if (newRole === "ETUDIANT") return "ETUD";
+      else if (newRole === "PROFESSEUR") return "PROF";
+      else if (newRole === "EDITEUR") return "EDIT";
+      else if (newRole === "ADMIN") return "ADM";
+      else return null;
+    };
 
     const requestBody = {
-      firstname : newFirstname,
-      lastname : newLastname,
-      email : email,
-      role : setRole(),
-      password : newPassword
-    }
-    const response = await api.put(`/api/users/${id}`, requestBody)
-    return response
+      firstname: newFirstname,
+      lastname: newLastname,
+      email: email,
+      role: setRole(),
+      password: newPassword,
+    };
+    const response = await api.put(`/api/users/${id}`, requestBody);
+    return response;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
 
 export const deleteUser = async (id) => {
   try {
-    const response = await api.delete(`/api/users/${id}`)
-    console.log(response)
+    const response = await api.delete(`/api/users/${id}`);
+    console.log(response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
 
-
-
-
-
-//-------------------------------------------------------------------------
-
-const API_URL = "http://localhost:8081/api/news";
+//-------------------------------------
+const NEWS_ENDPOINT = "api/news";
 
 // Récupérer toutes les news
 export const getNews = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await api.get(NEWS_ENDPOINT);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des news :", error);
@@ -204,8 +199,8 @@ export const addNews = async (news) => {
     if (news.imageFile) {
       formData.append("image", news.imageFile);
     }
-    // Ne laissez pas axios forcer manuellement le header Content-Type
-    const response = await axios.post(`${API_URL}/add`, formData);
+    // Utilisation de l'instance api pour faire la requête
+    const response = await api.post(`${NEWS_ENDPOINT}/add`, formData);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de l'ajout de la news :", error);
@@ -213,12 +208,10 @@ export const addNews = async (news) => {
   }
 };
 
-
-
 // Supprimer une news
 export const deleteNews = async (id) => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await api.delete(`${NEWS_ENDPOINT}/${id}`);
   } catch (error) {
     console.error("Erreur lors de la suppression de la news :", error);
   }
@@ -244,10 +237,82 @@ export const updateNews = async (id, news) => {
     if (news.imageFile) {
       formData.append("image", news.imageFile);
     }
-    const response = await axios.put(`${API_URL}/${id}`, formData);
+    const response = await api.put(`${NEWS_ENDPOINT}/${id}`, formData);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la mise à jour de la news :", error);
+    throw error;
+  }
+};
+
+//
+
+// Todo functions
+export const getAllTodos = async () => {
+  try {
+    const response = await api.get("api/todos");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+    throw error;
+  }
+};
+
+export const saveTodo = async (todo) => {
+  try {
+    const response = await api.post("api/todos", todo);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving todo:", error);
+    throw error;
+  }
+};
+
+export const getTodo = async (id) => {
+  try {
+    const response = await api.get(`api/todos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching todo:", error);
+    throw error;
+  }
+};
+
+export const updateTodo = async (id, todo) => {
+  try {
+    const response = await api.put(`api/todos/${id}`, todo);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating todo:", error);
+    throw error;
+  }
+};
+
+export const deleteTodo = async (id) => {
+  try {
+    await api.delete(`api/todos/${id}`);
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+    throw error;
+  }
+};
+
+export const completeTodo = async (id) => {
+  try {
+    const response = await api.patch(`api/todos/${id}/complete`);
+    return response.data;
+  } catch (error) {
+    console.error("Error completing todo:", error);
+    throw error;
+  }
+};
+
+export const inCompleteTodo = async (id) => {
+  try {
+    const response = await api.patch(`api/todos/${id}/in-complete`);
+    return response.data;
+  } catch (error) {
+    console.error("Error marking todo as incomplete:", error);
     throw error;
   }
 };

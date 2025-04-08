@@ -34,7 +34,7 @@ const pages = [
 ];
 */
 
-const settings = ["Profile", "Gestion Compte", "Ajouter News", "Logout"];
+const settings = ["Profil", "Gestion Compte", "Ajouter News", "Déconnexion"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -43,12 +43,12 @@ function Navbar() {
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [role, setRole] = React.useState("");
-
   React.useEffect(() => {
     getUserDetails()
       .then((result) => {
-        setFirstname(result.firstName);
-        setLastname(result.lastName);
+        console.log(result)
+        setFirstname(result.firstname);
+        setLastname(result.lastname);
         setEmail(result.email);
         setRole(result.role);
       })
@@ -57,7 +57,7 @@ function Navbar() {
       );
   }, [firstname, lastname, email]);
   const allPages = [
-    { id: 0, title: "Home", lien: "/espace-eilco" },
+    { id: 0, title: "Accueil", lien: "/espace-eilco" },
     {
       id: 1,
       title: "Emploi du temps",
@@ -97,14 +97,14 @@ function Navbar() {
         ? "/espace-editeur"
         : "/espace-eilco";
 
-    if (setting === "Profile") {
+    if (setting === "Profil") {
       navigate(`${basePath}/profile`);
-    } else if (setting === "Logout") {
+    } else if (setting === "Déconnexion") {
       const response = await logout();
       if (response) {
         navigate("/");
       } else {
-        console.error("Logout failed");
+        console.error("La déconnexion a échoué");
       }
     } else if (setting === "Gestion Compte") {
       navigate(`${basePath}/manage`);

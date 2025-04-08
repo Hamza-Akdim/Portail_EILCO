@@ -8,6 +8,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,9 +39,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Normally /api/auth/** bdltha db ghir bach mndir authentification ... hhh
+                        .requestMatchers("/api/auth/**").permitAll()// Normally /api/auth/** bdltha db ghir bach mndir authentification ... hhh
+                        .requestMatchers("/api/todos/**").permitAll()
+                        .requestMatchers("/api/contacts/**").permitAll()
+                        .requestMatchers("/api/news/**").permitAll()
                         .requestMatchers("/api/etudiant/**").hasAuthority("ETUDIANT") // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
                         .requestMatchers("/api/professeur/**").hasAuthority("PROFESSEUR")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")  // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas

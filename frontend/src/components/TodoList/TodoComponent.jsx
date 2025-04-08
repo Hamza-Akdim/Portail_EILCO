@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getTodo, saveTodo, updateTodo } from "../../services/TodoService";
+import { getTodo, saveTodo, updateTodo } from "../../utils/apiFunctions.js";
 import { useNavigate, useParams } from "react-router-dom";
 
 const TodoComponent = () => {
@@ -7,24 +7,28 @@ const TodoComponent = () => {
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Si un id est présent, on charge la tâche et on pré-remplit le formulaire
   useEffect(() => {
     if (id) {
       getTodo(id)
           .then((response) => {
-            setTitle(response.data.title);
-            setDescription(response.data.description);
-            setCompleted(response.data.completed);
+            setTitle(response.title);
+            setDescription(response.description);
+            setCompleted(response.completed);
           })
-          .catch((error) => console.error(error));
+          .catch((error) => {
+            console.error("Error fetching todo:", error);
+            setApiError("Error loading todo. Please try again.");
+          });
     }
   }, [id]);
 
   const saveOrUpdateTodo = (e) => {
     e.preventDefault();
+    setApiError("");
 
     // Validation des champs requis
     const validationErrors = {};
@@ -44,11 +48,17 @@ const TodoComponent = () => {
     if (id) {
       updateTodo(id, todo)
           .then(() => navigate("/espace-eilco/todos"))
-          .catch((error) => console.error(error));
+          .catch((error) => {
+            console.error("Error updating todo:", error);
+            setApiError("Error updating todo. Please try again.");
+          });
     } else {
       saveTodo(todo)
           .then(() => navigate("/espace-eilco/todos"))
-          .catch((error) => console.error(error));
+          .catch((error) => {
+            console.error("Error saving todo:", error);
+            setApiError("Error saving todo. Please try again.");
+          });
     }
   };
 
@@ -67,7 +77,7 @@ const TodoComponent = () => {
           <form className="space-y-4" onSubmit={saveOrUpdateTodo} noValidate>
             <div className="flex flex-col space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Titre de la tâche:
+                Titre de la tâche :
               </label>
               <input
                   type="text"
@@ -84,7 +94,7 @@ const TodoComponent = () => {
 
             <div className="flex flex-col space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Description de la tâche:
+                Description de la tâche :
               </label>
               <input
                   type="text"

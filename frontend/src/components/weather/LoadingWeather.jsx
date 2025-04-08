@@ -5,7 +5,7 @@ function Loading() {
   return (
     <div className="weather-country mt-40">
       <CloudIcon className="w-20 mx-auto animate-bounce" />
-      <p className="pt-3">Loading weather...</p>
+      <p className="pt-3">Chargement de la météo...</p>
     </div>
   );
 }

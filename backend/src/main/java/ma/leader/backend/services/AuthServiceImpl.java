@@ -7,35 +7,32 @@ import ma.leader.backend.repositories.UserRepository;
 import ma.leader.backend.requests.SignupRequest;
 import ma.leader.backend.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/**
- * @author akdim
- */
-
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private JwtUtils jwtUtils;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public String registreUser(SignupRequest request) throws UserAlreadyExists{
+    public String registreUser(SignupRequest request) throws UserAlreadyExists {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
 
         if (existingUser.isPresent()) {
-            new UserAlreadyExists("Error: This email already exists");
+            throw new UserAlreadyExists("Error: This email already exists.");
         }
 
-        String email = request.getEmail();
-        UserRole userRole = affectRole(request.getRole());
+        UserRole userRole = mapRoleFromRequest(request.getRole());
 
         User newUser = new User();
         newUser.setFirstname(request.getFirstname());
@@ -46,32 +43,30 @@ public class AuthServiceImpl implements AuthService{
 
         userRepository.save(newUser);
 
-        return jwtUtils.generateToken(newUser.getEmail(), newUser.getFirstname(), newUser.getLastname(),userRole);
+        return jwtUtils.generateToken(
+                newUser.getId(), // userId as subject
+                newUser.getEmail(),
+                newUser.getFirstname(),
+                newUser.getLastname(),
+                userRole
+        );
     }
 
-    private UserRole determineRoleByEmail(String email) {
-        if (email.contains("@etu")) {
-            return UserRole.ETUDIANT;
-        } else if (email.contains("@prof")) {
-            return UserRole.PROFESSEUR;
-        } else if (email.contains("@admin")){
-            return UserRole.ADMIN;
-        }else{
-            return null;
-        }
-    }
-
-    private UserRole affectRole(String role) {
-        if (role.equals("ETUD")){
-            return UserRole.ETUDIANT;
-        } else if (role.equals("PROF")) {
-            return UserRole.PROFESSEUR;
-        } else if (role.equals("EDIT")){
-            return UserRole.EDITEUR;
-        }else if (role.equals("ADM")){
-            return UserRole.ADMIN;
-        } else{
-            return null;
+    /**
+     * Maps role code from request to UserRole enum.
+     */
+    private UserRole mapRoleFromRequest(String role) {
+        switch (role) {
+            case "ETUD":
+                return UserRole.ETUDIANT;
+            case "PROF":
+                return UserRole.PROFESSEUR;
+            case "EDIT":
+                return UserRole.EDITEUR;
+            case "ADM":
+                return UserRole.ADMIN;
+            default:
+                throw new IllegalArgumentException("Invalid role provided: " + role);
         }
     }
 }

@@ -15,4 +15,5 @@ public class TodoDto {
     private String title;
     private String description;
     private boolean completed;
+    private Long userId;
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 
 @Component
 public class JwtUtils {
+
     @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
 
@@ -27,11 +28,13 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public String generateToken(String email, String firstName, String lastName, UserRole role) {
+    public String generateToken(Long userId, String email, String firstname, String lastname, UserRole role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
         claims.put("role", role.name());
-        claims.put("firstName", firstName);
-        claims.put("lastName", lastName);
+        claims.put("firstname", firstname);
+        claims.put("lastname", lastname);
+        claims.put("email", email);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -40,15 +43,6 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    public String extractUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
     }
 
     public boolean validateToken(String token) {
@@ -63,31 +57,36 @@ public class JwtUtils {
         }
     }
 
-
-    private <T> T extractClaim(String token, java.util.function.Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parserBuilder()
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private <T> T extractClaim(String token, java.util.function.Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-
-    public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("role", String.class));
-    }
-
-    public String extractFirstname(String token) {
-        return extractClaim(token, claims -> claims.get("firstName", String.class));
-    }
-
-    public String extractLastname(String token) {
-        return extractClaim(token, claims -> claims.get("lastName", String.class));
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public String extractFirstname(String token) {
+        return extractClaim(token, claims -> claims.get("firstname", String.class));
+    }
+
+    public String extractLastname(String token) {
+        return extractClaim(token, claims -> claims.get("lastname", String.class));
+    }
+
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
 }

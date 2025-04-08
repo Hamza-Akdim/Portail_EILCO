@@ -1,19 +1,16 @@
 package ma.leader.backend.responses;
 
-
 import lombok.AllArgsConstructor;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * @author akdim
- */
-
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthResponse {
+    private Long userId;
     private String email;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String role;
 }

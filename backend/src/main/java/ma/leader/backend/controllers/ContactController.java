@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contacts")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins= "http://localhost:5173", allowCredentials = "true")
 @RequiredArgsConstructor
 public class ContactController {
     private final ContactService contactService;
@@ -35,7 +35,17 @@ public class ContactController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'EDITEUR')")
     public ContactEntry createContact(@RequestBody ContactEntry contactEntry) {
         return contactService.createContact(contactEntry);
+    }
+
+    @PutMapping("/{city}/{level}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EDITEUR')")
+    public ContactEntry updateContact(
+            @PathVariable String city,
+            @PathVariable String level,
+            @RequestBody ContactEntry contactEntry) {
+        return contactService.updateContact(city, level, contactEntry);
     }
 }
