@@ -59,7 +59,7 @@ public class UserController {
                 updatedUser.getEmail(),
                 updatedUser.getRole()
         );
-
+        System.out.println(updatedUser.getFirstname());
         return ResponseEntity.ok(userResponse);
     }
 
