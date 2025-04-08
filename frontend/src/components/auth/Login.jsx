@@ -2,22 +2,20 @@ import React, { useState } from "react";
 import { auth } from "../../utils/apiFunctions";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { getUserDetails } from "../../utils/apiFunctions";
 
 const Login = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
 
   const submitHandler = async (event) => {
-  
     event.preventDefault();
-  
+
     if (!email || !password) {
       toast({
         title: "Veuillez remplir tous les champs",
@@ -41,22 +39,38 @@ const Login = () => {
           position: "bottom",
         });
 
-        //To FIX AFTER
-        if (email.includes("@etu") || email.includes("@prof")) {
-          navigate("espace-eilco");
-        } else if (email.includes("@admin")) {
-          navigate("espace-admin");
-        } else if (email.includes("@edit")) {
-          navigate("/espace-editeur"); 
-        } else {
-          navigate("/");
+        const user = await getUserDetails();
+
+        if (!user || !user.role) {
+          toast({
+            title: "Impossible de récupérer le rôle de l'utilisateur.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
+          return;
+        }
+
+        switch (user.role) {
+          case "ETUDIANT":
+          case "PROFESSEUR":
+            navigate("/espace-eilco");
+            break;
+          case "ADMIN":
+            navigate("/espace-admin");
+            break;
+          case "EDITEUR":
+            navigate("/espace-editeur");
+            break;
+          default:
+            navigate("/");
         }
       }
     } catch (error) {
       if (error.response) {
-        const { data } = error.response;
         toast({
-          title: `${data}`,
+          title: error.response.data || "Erreur serveur",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -64,7 +78,7 @@ const Login = () => {
         });
       } else if (error.request) {
         toast({
-          title: "Network Error",
+          title: "Erreur réseau",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -72,7 +86,7 @@ const Login = () => {
         });
       } else {
         toast({
-          title: "Error",
+          title: "Erreur",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -84,9 +98,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-6 lg:px-4">
-      <div
-          className="w-full max-w-md sm:max-w-5xl min-h-[550px] bg-white shadow-none sm:shadow-lg sm:rounded-lg overflow-hidden flex flex-col lg:flex-row">
-
+      <div className="w-full max-w-md sm:max-w-5xl min-h-[550px] bg-white shadow-none sm:shadow-lg sm:rounded-lg overflow-hidden flex flex-col lg:flex-row">
         {/*<div className="hidden lg:block lg:w-3/5">*/}
         {/*  <DotLottieReact*/}
         {/*      src="https://lottie.host/cfdfdc04-62db-48a7-a678-5662f46dd12c/xjz92rLeIv.lottie"*/}
@@ -96,18 +108,18 @@ const Login = () => {
         {/*  />*/}
         {/*</div>*/}
         <div
-            className="hidden lg:block lg:w-3/5 bg-cover bg-center"
-            style={{
-              backgroundImage: "url('CAMPUS-CALAIS-EILCO_comp-1024x704.jpg')",
-            }}
+          className="hidden lg:block lg:w-3/5 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('CAMPUS-CALAIS-EILCO_comp-1024x704.jpg')",
+          }}
         ></div>
 
         <div className="w-full lg:w-2/5 p-8 flex flex-col justify-center">
           <div className="flex justify-center mb-6">
             <img
-                src="/EILCO-LOGO.png"
-                alt="EILCO Logo"
-                className="h-12 sm:h-14 md:h-20 w-auto"
+              src="/EILCO-LOGO.png"
+              alt="EILCO Logo"
+              className="h-12 sm:h-14 md:h-20 w-auto"
             />
           </div>
 
@@ -121,11 +133,11 @@ const Login = () => {
                 Email
               </label>
               <input
-                  type="email"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="Entrez votre email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Entrez votre email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -134,22 +146,22 @@ const Login = () => {
                 Mot de passe
               </label>
               <input
-                  type={showPassword ? "text" : "password"} // Toggle between text and password
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="Entrez votre mot de passe"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? "text" : "password"} // Toggle between text and password
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                placeholder="Entrez votre mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
             <div className="flex justify-between items-center text-xs sm:text-sm mb-6">
               <div>
                 <input
-                    type="checkbox"
-                    id="showPassword"
-                    className="mr-2"
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
+                  type="checkbox"
+                  id="showPassword"
+                  className="mr-2"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
                 />
                 <label htmlFor="showPassword">Afficher le mot de passe</label>
               </div>
@@ -159,9 +171,9 @@ const Login = () => {
             </div>
 
             <button
-                type="submit"
-                className="w-full bg-eilco-blue text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
-                onClick={(e) => submitHandler(e)}
+              type="submit"
+              className="w-full bg-eilco-blue text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+              onClick={(e) => submitHandler(e)}
             >
               Se connecter
             </button>

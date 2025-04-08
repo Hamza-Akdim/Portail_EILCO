@@ -34,7 +34,6 @@ const pages = [
 ];
 */
 
-
 const settings = ["Profile", "Gestion Compte", "Ajouter News", "Logout"];
 
 function Navbar() {
@@ -57,35 +56,49 @@ function Navbar() {
         console.log(`Error while fetchinf the user data : ${err}`)
       );
   }, [firstname, lastname, email]);
-    const allPages = [
-        { id: 0, title: "Home", lien: "/espace-eilco" },
-        {
-            id: 1,
-            title: "Emploi du temps",
-            lien: "https://edt.univ-littoral.fr/direct/index.jsp?data=...",
-        },
-        { id: 2, title: "NextCloud", lien: "https://cloudeilco.univ-littoral.fr/index.php/login" },
-        { id: 3, title: "Moodle", lien: "https://portail.eilco.fr:28/" },
-        { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
-        { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
-        { id: 6, title: "Stages", lien: "/espace-eilco/stages" },
-        {id: 7, title: "Services", lien :"/espace-eilco/services"}
+  const allPages = [
+    { id: 0, title: "Home", lien: "/espace-eilco" },
+    {
+      id: 1,
+      title: "Emploi du temps",
+      lien: "https://edt.univ-littoral.fr/direct/index.jsp?data=...",
+    },
+    {
+      id: 2,
+      title: "NextCloud",
+      lien: "https://cloudeilco.univ-littoral.fr/index.php/login",
+    },
+    { id: 3, title: "Moodle", lien: "https://portail.eilco.fr:28/" },
+    { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
+    { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
+    { id: 6, title: "Stages", lien: "/espace-eilco/stages" },
+    { id: 7, title: "Services", lien: "/espace-eilco/services" },
+  ];
 
-    ];
+  // Ajouter une page si le rôle est ADMIN ou EDITEUR
+  if (role === "ADMIN" || role === "EDITEUR") {
+    allPages.push({
+      id: 7,
+      title: "Ajouter Contacts",
+      lien: "/espace-admin/add-contact",
+    });
+  }
 
-// Ajouter une page si le rôle est ADMIN ou EDITEUR
-    if (role === "ADMIN" || role === "EDITEUR") {
-        allPages.push({ id: 7, title: "Ajouter Contacts", lien: "/espace-admin/add-contact" });
-    }
-
-    const pages = allPages;
+  const pages = allPages;
   const navigate = useNavigate();
 
   const handleUserMenuClick = async (setting) => {
     handleCloseUserMenu();
 
+    const basePath =
+      role === "ADMIN"
+        ? "/espace-admin"
+        : role === "EDITEUR"
+        ? "/espace-editeur"
+        : "/espace-eilco";
+
     if (setting === "Profile") {
-      navigate("/espace-eilco/profile");
+      navigate(`${basePath}/profile`);
     } else if (setting === "Logout") {
       const response = await logout();
       if (response) {
@@ -94,7 +107,7 @@ function Navbar() {
         console.error("Logout failed");
       }
     } else if (setting === "Gestion Compte") {
-      navigate("/espace-admin/manage");
+      navigate(`${basePath}/manage`);
     }
   };
 
@@ -283,7 +296,7 @@ function Navbar() {
                       {setting != "Gestion Compte" && setting != "Ajouter News"
                         ? setting
                         : null}
-                        </Typography>
+                    </Typography>
                   ) : (
                     <Typography textAlign="center">{setting}</Typography>
                   )}

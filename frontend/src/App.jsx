@@ -50,7 +50,6 @@ function App() {
             <Route path="news-admin" element={<NewsAdmin />} />
             <Route path="add-contact" element={<AddContactPage />} />
             <Route path="services" element={<ServicesPage />} />
-
           </Route>
         </Route>
 

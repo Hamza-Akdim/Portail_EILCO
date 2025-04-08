@@ -78,7 +78,7 @@ export const signUp = async (firstName, lastName, email, password, role) => {
 
 export const getUserDetails = async () => {
   try {
-    const response = await api("api/auth/me");
+    const response = await api.get("api/auth/me");
     return response.data;
   } catch (error) {
     console.error("Failed to fetch user details", error);
@@ -121,6 +121,52 @@ export const getUserByEmail = async (email) => {
     return null;
   }
 };
+
+export const updateUser = async (newFirstname, newLastname, email, newRole, newPassword, id) => {
+  try {
+    
+    const setRole = ()=>{
+      if(newRole==="ETUDIANT")
+        return "ETUD"
+      else if(newRole==="PROFESSEUR")
+        return "PROF";
+      else if(newRole==="EDITEUR")
+        return "EDIT";
+      else if (newRole==="ADMIN")
+        return "ADM";
+      else
+        return null;
+    }
+    
+
+    const requestBody = {
+      firstname : newFirstname,
+      lastname : newLastname,
+      email : email,
+      role : setRole(),
+      password : newPassword
+    }
+    const response = await api.put(`/api/users/${id}`, requestBody)
+    return response
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};
+
+export const deleteUser = async (id) => {
+  try {
+    const response = await api.delete(`/api/users/${id}`)
+    console.log(response)
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+};
+
+
+
+
 
 //-------------------------------------------------------------------------
 

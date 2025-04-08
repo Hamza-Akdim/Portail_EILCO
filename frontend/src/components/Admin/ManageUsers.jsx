@@ -18,10 +18,18 @@ import {
   TextField,
   TablePagination,
   InputAdornment,
+  useTheme,
 } from "@mui/material";
 import { Edit, Delete, PersonAdd, Search } from "@mui/icons-material";
-import { getAllUsers, getUserByEmail } from "../../utils/apiFunctions";
+import {
+  deleteUser,
+  getAllUsers,
+  getUserByEmail,
+} from "../../utils/apiFunctions";
 import { useNavigate } from "react-router-dom";
+import EditUserModal from "./EditUserModel";
+import ViewUserModal from "./ViewUserModel";
+import { useMediaQuery } from "@mui/system";
 
 const roleColors = {
   ETUDIANT: "#4caf50",
@@ -32,13 +40,22 @@ const roleColors = {
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pageTotal, setPageTotal] = useState(0);
+  const [editUser, setEditUser] = useState(null);
+  const [openEditUser, setOpenEditUser] = useState(false);
+  const [expandedRowId, setExpandedRowId] = useState(null);
+
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openViewModal, setOpenViewModal] = useState(false);
 
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -48,20 +65,25 @@ const ManageUsers = () => {
     };
 
     fetchUsers();
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, openEditUser]);
 
   const handleEdit = (user) => {
-    setSuccessMessage(`Modification de ${user.firstName} en cours...`);
-    setTimeout(() => setSuccessMessage(""), 3000);
+    setEditUser(user);
+    setOpenEditUser(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (
       window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")
     ) {
-      setUsers(users.filter((user) => user.id !== id));
-      setSuccessMessage("Utilisateur supprimé avec succès !");
-      setTimeout(() => setSuccessMessage(""), 3000);
+      try {
+        await deleteUser(id);
+        setUsers(users.filter((user) => user.id !== id));
+        setSuccessMessage("Utilisateur supprimé avec succès !");
+        setTimeout(() => setSuccessMessage(""), 3000);
+      } catch (error) {
+        console.error("Erreur lors de la suppression :", error);
+      }
     }
   };
 
@@ -71,7 +93,7 @@ const ManageUsers = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to first page when rows per page changes
+    setPage(0);
   };
 
   const handleButton = () => {
@@ -81,26 +103,23 @@ const ManageUsers = () => {
   const searchUser = async (e) => {
     const query = e.target.value;
     setSearchTerm(query);
-  
-    if (query.length > 0) {  // Avoid searching when input is empty
+
+    if (query.length > 0) {
       try {
-        const data = await getUserByEmail(query); // Fetch users by email
-        setUsers(data); // Update users state with filtered results
+        const data = await getUserByEmail(query);
+        setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
-        setUsers([]); // If error occurs, reset users list
+        setUsers([]);
       }
     } else {
-      // If search input is empty, refetch all users
       const allUsers = await getAllUsers(page, rowsPerPage);
       setUsers(allUsers.data);
     }
   };
-  
 
   return (
     <Container component="main" maxWidth="lg" sx={{ py: 4, px: 2 }}>
-      {/* Message de succès */}
       <Snackbar
         open={!!successMessage}
         autoHideDuration={3000}
@@ -111,7 +130,17 @@ const ManageUsers = () => {
         </Alert>
       </Snackbar>
 
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={3000}
+        onClose={() => setErrorMessage("")}
+      >
+        <Alert onClose={() => setErrorMessage("")} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
         <TextField
           size="small"
           id="standard-basic"
@@ -120,6 +149,35 @@ const ManageUsers = () => {
           value={searchTerm}
           onChange={searchUser}
           sx={{ width: "250px", marginBottom: "10px" }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box> */}
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "center", sm: "flex-end" },
+          width: "100%",
+          mb: 2,
+        }}
+      >
+        <TextField
+          size="small"
+          id="standard-basic"
+          variant="standard"
+          label="Rechercher par email"
+          value={searchTerm}
+          onChange={searchUser}
+          fullWidth
+          sx={{
+            maxWidth: { xs: "100%", sm: "300px" },
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -172,11 +230,21 @@ const ManageUsers = () => {
               <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>
                 Email
               </TableCell>
-              <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>
+              <TableCell
+                sx={{
+                  display: { xs: "none", sm: "table-cell" },
+                  color: "#fff",
+                  fontWeight: "bold",
+                }}
+              >
                 Rôle
               </TableCell>
               <TableCell
-                sx={{ color: "#fff", fontWeight: "bold" }}
+                sx={{
+                  display: { xs: "none", sm: "table-cell" },
+                  color: "#fff",
+                  fontWeight: "bold",
+                }}
                 align="center"
               >
                 Actions
@@ -185,48 +253,93 @@ const ManageUsers = () => {
           </TableHead>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id} hover>
-                <TableCell>{user.firstname}</TableCell>
-                <TableCell>{user.lastname}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <span
-                    style={{
-                      backgroundColor: roleColors[user.role],
-                      color: "white",
-                      padding: "6px 12px",
-                      borderRadius: "12px",
-                      display: "inline-block",
-                      width: "100px",
-                      textAlign: "center",
-                      fontSize: "14px",
-                    }}
+              <React.Fragment key={user.id}>
+                <TableRow
+                  hover
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setOpenViewModal(true);
+                  }}
+                  sx={{ cursor: isMobile ? "pointer" : "default" }}
+                >
+                  <TableCell>{user.firstname}</TableCell>
+                  <TableCell>{user.lastname}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+
+                  {/* Hide these on small screens */}
+                  <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    <span
+                      style={{
+                        backgroundColor: roleColors[user.role],
+                        color: "white",
+                        padding: "6px 12px",
+                        borderRadius: "12px",
+                        display: "inline-block",
+                        width: "100px",
+                        textAlign: "center",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {user.role.toLowerCase()}
+                    </span>
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ display: { xs: "none", sm: "table-cell" } }}
                   >
-                    {user.role.toLowerCase()}
-                  </span>
-                </TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Modifier">
-                    <IconButton
-                      sx={{ color: "#004f8b" }}
-                      onClick={() => handleEdit(user)}
-                    >
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Supprimer">
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(user.id)}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
+                    <Tooltip title="Modifier">
+                      <IconButton
+                        sx={{ color: "#004f8b" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(user);
+                        }}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Supprimer">
+                      <IconButton
+                        color="error"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(user.id);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
+
+        <EditUserModal
+          open={openEditUser}
+          editUser={editUser}
+          onClose={() => setOpenEditUser(false)}
+          onSuccess={() => {
+            setSuccessMessage("Utilisateur modifié avec succès !");
+            setOpenEditUser(false);
+            setTimeout(() => setSuccessMessage(""), 3000);
+          }}
+          onError={(errMsg) => {
+            setErrorMessage(errMsg || "Erreur lors de la modification.");
+            setTimeout(() => setErrorMessage(""), 3000);
+          }}
+        />
+
+        <ViewUserModal
+          open={openViewModal}
+          user={selectedUser}
+          onClose={() => setOpenViewModal(false)}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </TableContainer>
 
       {/* Improved Pagination Design */}

@@ -66,7 +66,7 @@ function Main() {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleNavigateToNewsAdmin} // Utilisation correcte de la fonction de navigation
+          onClick={handleNavigateToNewsAdmin} 
         >
           {"Accéder à l'administration des nouvelles"}
         </Button>
