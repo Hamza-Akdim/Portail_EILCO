@@ -49,12 +49,20 @@ export const auth = async (email, password) => {
 };
 
 export const signUp = async (firstName, lastName, email, password, role) => {
+  const setRole = () => {
+    if (role === "ETUDIANT") return "ETUD";
+    else if (role === "PROFESSEUR") return "PROF";
+    else if (role === "EDITEUR") return "EDIT";
+    else if (role === "ADMIN") return "ADM";
+    else return null;
+  };
+
   const requestBody = {
     firstname: firstName,
     lastname: lastName,
     email: email,
     password: password,
-    role: role,
+    role: setRole(),
   };
 
   const response = await api.post("api/auth/signup", requestBody, {

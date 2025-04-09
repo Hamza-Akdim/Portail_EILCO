@@ -18,6 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author akdim
@@ -128,5 +131,17 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid token");
         }
     }
+
+
+    @PostMapping("/signup/excel")
+    public ResponseEntity<?> registerUsersFromExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            List<String> result = authService.registerUsersFromExcel(file);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
 
 }

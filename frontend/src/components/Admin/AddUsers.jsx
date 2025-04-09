@@ -32,18 +32,14 @@ const AddUsers = () => {
 
   const roles = ["Etudiant", "Professeur", "Editeur", "Admin"];
 
-  const handleRole = (e)=>{
-    if(e.target.value==="Etudiant")
-      setRole("ETUD")
-    else if(e.target.value==="Professeur")
-      setRole("PROF")
-    else if(e.target.value==="Editeur")
-      setRole("EDIT")
-    else
-      setRole("ADM")
+  const handleRole = (e) => {
+    // if (e.target.value === "Etudiant") setRole("ETUD");
+    // else if (e.target.value === "Professeur") setRole("PROF");
+    // else if (e.target.value === "Editeur") setRole("EDIT");
+    // else setRole("ADM");
+    setRole(e.target.value);
+  };
 
-  }
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -135,11 +131,10 @@ const AddUsers = () => {
             label="Rôle"
             onChange={handleRole}
           >
-            {roles.map((role) => (
-              <MenuItem key={role} value={role}>
-                {role}
-              </MenuItem>
-            ))}
+            <MenuItem value="ETUDIANT">Étudiant</MenuItem>
+            <MenuItem value="PROFESSEUR">Professeur</MenuItem>
+            <MenuItem value="EDITEUR">Éditeur</MenuItem>
+            <MenuItem value="ADMIN">Admin</MenuItem>
           </Select>
         </FormControl>
 
