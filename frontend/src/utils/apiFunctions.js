@@ -54,7 +54,7 @@ export const signUp = async (firstName, lastName, email, password, role) => {
     else if (role === "PROFESSEUR") return "PROF";
     else if (role === "EDITEUR") return "EDIT";
     else if (role === "ADMIN") return "ADM";
-    else return null;
+    else return "ETUD"; // Default role if none specified
   };
 
   const requestBody = {

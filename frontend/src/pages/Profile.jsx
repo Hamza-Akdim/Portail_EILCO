@@ -12,16 +12,15 @@ const Profile = () => {
   useEffect(() => {
     getUserDetails()
       .then((result) => {
-        setFirstname(result.firstName);
-        setLastname(result.lastName);
+        setFirstname(result.firstname);
+        setLastname(result.lastname);
         setEmail(result.email);
       })
       .catch((err) =>
         console.log(`Error while fetchinf the user data : ${err}`)
       );
-  }, [firstname, lastname, email]);
+  }, []);
 
-  
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -29,8 +28,7 @@ const Profile = () => {
         <div
           className="w-full h-56 bg-cover bg-center relative"
           style={{
-            backgroundImage:
-              "url(../../public/universite-du-littoral-cote-d-opale-23.jpg)",
+            backgroundImage: "url(/universite-du-littoral-cote-d-opale-23.jpg)",
           }}
         >
           <div className="absolute bottom-0 left-4 transform translate-y-1/2">
@@ -58,10 +56,10 @@ const Profile = () => {
 
           <div className="bg-gray-200 p-4 rounded-lg mt-6">
             <p className="text-black font-semibold">
-              {firstname} {"n' a pas encore ajouté d informations"}
+              {firstname} {"n'a pas encore ajouté d'informations"}
             </p>
             <p className="text-gray-600 text-sm">
-              {"Le titre et la section à propos s' afficheront ici"}
+              {"Le titre et la section à propos s'afficheront ici"}
             </p>
           </div>
         </div>

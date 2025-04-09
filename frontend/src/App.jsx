@@ -62,6 +62,8 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="news-admin" element={<NewsAdmin />} />
             <Route path="services" element={<ServicesPage />} />
+            <Route path="add-contact" element={<AddContactPage />} />
+
           </Route>
         </Route>
       </Routes>

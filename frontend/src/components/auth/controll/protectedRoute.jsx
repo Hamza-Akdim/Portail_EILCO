@@ -25,7 +25,16 @@ const ProtectedRoute = ({ requiredRole }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="relative">
+          <div className="h-16 w-16 rounded-full border-t-4 border-b-4 border-eilco-blue animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="h-8 w-8 rounded-full bg-white animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

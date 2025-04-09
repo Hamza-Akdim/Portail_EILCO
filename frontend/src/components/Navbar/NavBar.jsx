@@ -11,28 +11,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import { getUserDetails, logout } from "../../utils/apiFunctions";
-/*
-const pages = [
-  { id: 0, title: "Home", lien: "/espace-eilco" },
-  {
-    id: 1,
-    title: "Emploi du temps",
-    lien: "https://edt.univ-littoral.fr/direct/index.jsp?data=6b052c86649c89d6314052e0c2e2410df63f1816a4b0a6ae41893446ff37497ec55ef35a53135e002df1531698f94af0a3ec2aaf9a1c38d06b44c36d8361b35011a10a238b0a823699328a9323a95a07c004deba0e9910a95c5e72a718a33d6e",
-  },
-  {
-    id: 2,
-    title: "NextCloud",
-    lien: "https://cloudeilco.univ-littoral.fr/index.php/login",
-  },
-  { id: 3, title: "Moodle", lien: "https://portail.eilco.fr:28/" },
-  { id: 4, title: "TodoList", lien: "/espace-eilco/todos" },
-  { id: 5, title: "Contacts", lien: "/espace-eilco/contacts" },
-  {id: 6, title: "Stages", lien :"/espace-eilco/stages"},
-  {id: 7, title: "Services", lien :"/espace-eilco/services"}
-];
-*/
+
 
 const settings = ["Profil", "Gestion Compte", "Ajouter News", "Déconnexion"];
 
@@ -43,6 +24,7 @@ function Navbar() {
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [role, setRole] = React.useState("");
+  const location = useLocation();
   React.useEffect(() => {
     getUserDetails()
       .then((result) => {
@@ -77,10 +59,11 @@ function Navbar() {
 
   // Ajouter une page si le rôle est ADMIN ou EDITEUR
   if (role === "ADMIN" || role === "EDITEUR") {
+    const basePath = role === "ADMIN" ? "/espace-admin" : "/espace-editeur";
     allPages.push({
       id: 8,
       title: "Ajouter Contacts",
-      lien: "/espace-admin/add-contact",
+      lien: `${basePath}/add-contact`,
     });
   }
 
@@ -108,6 +91,8 @@ function Navbar() {
       }
     } else if (setting === "Gestion Compte") {
       navigate(`${basePath}/manage`);
+    } else if (setting === "Ajouter News") {
+      navigate(`${basePath}/news-admin`);
     }
   };
 
@@ -123,6 +108,20 @@ function Navbar() {
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  // Fonction pour vérifier si un lien est actif
+  const isActiveLink = (path) => {
+    if (path.startsWith('http')) return false;
+    
+    // Si c'est la page d'accueil, vérifier exactement
+    if (path === "/espace-eilco") {
+      return location.pathname === path;
+    }
+    
+    // Pour les autres pages, vérifier si le chemin correspond ou commence par le lien
+    return location.pathname === path || 
+           (location.pathname.startsWith(path) && path !== "/espace-eilco");
   };
 
   return (
@@ -165,7 +164,13 @@ function Navbar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                <MenuItem 
+                  key={page.id} 
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    backgroundColor: isActiveLink(page.lien) ? "rgba(96, 158, 165, 0.2)" : "transparent",
+                  }}
+                >
                   <Typography textAlign="center">
                     {page.lien.startsWith("http") ? (
                       <a
@@ -232,6 +237,7 @@ function Navbar() {
                   color: "white",
                   display: "block",
                   marginLeft: "20px",
+                  backgroundColor: isActiveLink(page.lien) ? "rgba(96, 158, 165, 0.5)" : "transparent",
                   "&:hover": {
                     backgroundColor: "rgba(96, 158, 165, 0.69)",
                   },
@@ -286,22 +292,23 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={() => handleUserMenuClick(setting)}
-                >
-                  {role != "ADMIN" ? (
-                    <Typography textAlign="center">
-                      {setting != "Gestion Compte" && setting != "Ajouter News"
-                        ? setting
-                        : null}
-                    </Typography>
-                  ) : (
+              {settings
+                .filter((setting) => {
+                  // Admin a accès à toutes les options
+                  if (role === "ADMIN") return true;
+                  // Éditeur a accès à tout sauf "Gestion Compte"
+                  if (role === "EDITEUR") return setting !== "Gestion Compte";
+                  // Autres utilisateurs n'ont pas accès à "Gestion Compte" ni à "Ajouter News"
+                  return (setting !== "Gestion Compte" && setting !== "Ajouter News");
+                })
+                .map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => handleUserMenuClick(setting)}
+                  >
                     <Typography textAlign="center">{setting}</Typography>
-                  )}
-                </MenuItem>
-              ))}
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
         </Toolbar>

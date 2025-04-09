@@ -101,38 +101,21 @@ public class AuthServiceImpl implements AuthService {
     /**
      * Maps role code from request to UserRole enum.
      */
+
     private UserRole mapRoleFromRequest(String role) {
-        if (role.equals("ETUD")){
+
+        if (role.equals("ETUD")) {
             return UserRole.ETUDIANT;
         } else if (role.equals("PROF")) {
             return UserRole.PROFESSEUR;
-        } else if (role.equals("EDIT")){
+        } else if (role.equals("EDIT")) {
             return UserRole.EDITEUR;
-        }else if (role.equals("ADM")){
+        } else if (role.equals("ADM")) {
             return UserRole.ADMIN;
-        } else{
+        } else {
             return UserRole.ETUDIANT;
         }
-
-//        if (role == null || role.isEmpty()) {
-//            return UserRole.ETUDIANT; // Rôle par défaut
-//        }
-
-//        return UserRole.valueOf(role.toUpperCase());
     }
-
-//    private UserRole affectRole(String role) {
-//        if (role.equals("ETUD")){
-//            return UserRole.ETUDIANT;
-//        } else if (role.equals("PROF")) {
-//            return UserRole.PROFESSEUR;
-//        } else if (role.equals("EDIT")){
-//            return UserRole.EDITEUR;
-//        }else if (role.equals("ADM")){
-//            return UserRole.ADMIN;
-//        } else{
-//            return null;
-//        }
-    }
+}
 
 
