@@ -19,7 +19,8 @@ const Profile = () => {
       .catch((err) =>
         console.log(`Error while fetchinf the user data : ${err}`)
       );
-  }, []);
+  }, [firstname, lastname, email]);
+
   
   return (
     <div className="flex flex-col min-h-screen">
@@ -29,7 +30,7 @@ const Profile = () => {
           className="w-full h-56 bg-cover bg-center relative"
           style={{
             backgroundImage:
-              "url(/universite-du-littoral-cote-d-opale-23.jpg)",
+              "url(../../public/universite-du-littoral-cote-d-opale-23.jpg)",
           }}
         >
           <div className="absolute bottom-0 left-4 transform translate-y-1/2">
