@@ -30,22 +30,24 @@ const AddUsers = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [apiError, setApiError] = useState("");
 
-  const roles = ["Etudiant", "Professeur", "Editeur", "Admin"];
+  const roles = [
+    { label: "Etudiant", value: "ETUDIANT" },
+    { label: "Professeur", value: "PROFESSEUR" },
+    { label: "Editeur", value: "EDITEUR" },
+    { label: "Admin", value: "ADMIN" }
+  ];
 
-  const handleRole = (e)=>{
-    if(e.target.value==="Etudiant")
-      setRole("ETUD")
-    else if(e.target.value==="Professeur")
-      setRole("PROF")
-    else if(e.target.value==="Editeur")
-      setRole("EDIT")
-    else
-      setRole("ADM")
-
-  }
+  const handleRole = (e) => {
+    setRole(e.target.value);
+  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!role) {
+      setError("Veuillez sélectionner un rôle.");
+      return;
+    }
 
     if (passwordEtud !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
@@ -67,10 +69,11 @@ const AddUsers = () => {
 
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      setApiError(
-        error.response.data || "Une erreur s'est produite. Veuillez réessayer."
-      );
-
+      if (error.response) {
+        setApiError(error.response.data || "Une erreur s'est produite. Veuillez réessayer.");
+      } else {
+        setApiError("Une erreur s'est produite. Veuillez réessayer.");
+      }
       setTimeout(() => setApiError(""), 3000);
     }
   };
@@ -136,8 +139,8 @@ const AddUsers = () => {
             onChange={handleRole}
           >
             {roles.map((role) => (
-              <MenuItem key={role} value={role}>
-                {role}
+              <MenuItem key={role.value} value={role.value}>
+                {role.label}
               </MenuItem>
             ))}
           </Select>

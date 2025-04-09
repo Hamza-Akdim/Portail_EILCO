@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setEmail(request.getEmail());
         newUser.setEncryptedPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(userRole);
-        newUser.setEnabled(false); // L'utilisateur est désactivé jusqu'à la vérification de l'email
+        newUser.setEnabled(userRole == UserRole.ADMIN);
 
         userRepository.save(newUser);
 
@@ -53,13 +53,40 @@ public class AuthServiceImpl implements AuthService {
         return "Un email de vérification a été envoyé à votre adresse email.";
     }
 
-    /**
-     * Maps role code from request to UserRole enum.
-     */
+
     private UserRole mapRoleFromRequest(String role) {
-        if (role == null || role.isEmpty()) {
-            return UserRole.ETUDIANT; // Rôle par défaut
+        
+        if (role.equals("ETUD")){
+            return UserRole.ETUDIANT;
+        } else if (role.equals("PROF")) {
+            return UserRole.PROFESSEUR;
+        } else if (role.equals("EDIT")){
+            return UserRole.EDITEUR;
+        }else if (role.equals("ADM")){
+            return UserRole.ADMIN;
+        } else{
+            return UserRole.ETUDIANT;
         }
-        return UserRole.valueOf(role.toUpperCase());
+
+        //        if (role == null || role.isEmpty()) {
+        //            return UserRole.ETUDIANT; // Rôle par défaut
+        //        }
+
+        //        return UserRole.valueOf(role.toUpperCase());
     }
+
+    // private UserRole affectRole(String role) {
+    //     if (role.equals("ETUD")){
+    //         return UserRole.ETUDIANT;
+    //     } else if (role.equals("PROF")) {
+    //         return UserRole.PROFESSEUR;
+    //     } else if (role.equals("EDIT")){
+    //         return UserRole.EDITEUR;
+    //     }else if (role.equals("ADM")){
+    //         return UserRole.ADMIN;
+    //     } else{
+    //         return null;
+
+    //     }
+    // }
 }

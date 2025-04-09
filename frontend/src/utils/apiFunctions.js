@@ -49,21 +49,32 @@ export const auth = async (email, password) => {
 };
 
 export const signUp = async (firstName, lastName, email, password, role) => {
+  const setRole = () => {
+    if (role === "ETUDIANT") return "ETUD";
+    else if (role === "PROFESSEUR") return "PROF";
+    else if (role === "EDITEUR") return "EDIT";
+    else if (role === "ADMIN") return "ADM";
+    else return "ETUD"; // Default role if none specified
+  };
+
   const requestBody = {
     firstname: firstName,
     lastname: lastName,
     email: email,
     password: password,
-    role: role,
+    role: setRole(),
   };
 
-  const response = await api.post("api/auth/signup", requestBody, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log(response);
-  return response;
+  try {
+    const response = await api.post("api/auth/signup", requestBody, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getUserDetails = async () => {
