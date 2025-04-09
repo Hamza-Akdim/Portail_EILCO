@@ -39,9 +39,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
         try {
-            String token = authService.registreUser(signupRequest);
+            String message = authService.registreUser(signupRequest);
 
-            Cookie jwtCookie = new Cookie("token", token);
+            // Créer un cookie pour la session
+            Cookie jwtCookie = new Cookie("token", null);
             jwtCookie.setHttpOnly(false);
             jwtCookie.setSecure(false);
             jwtCookie.setPath("/");
@@ -49,7 +50,7 @@ public class AuthController {
             jwtCookie.setMaxAge(24 * 60 * 60);
             response.addCookie(jwtCookie);
 
-            return ResponseEntity.ok("Registration is successful");
+            return ResponseEntity.ok(message);
         } catch (UserAlreadyExists e) {
             return ResponseEntity.status(404).body("Error: This email already exists");
         } catch (Exception e) {
@@ -66,6 +67,11 @@ public class AuthController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+            if (!userDetails.getUser().isEnabled()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Veuillez vérifier votre email avant de vous connecter.");
+            }
 
             String token = jwtUtils.generateToken(
                     userDetails.getUser().getId(),

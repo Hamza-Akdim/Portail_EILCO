@@ -26,7 +26,10 @@ public class User {
 
     private String encryptedPassword;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    private boolean enabled = false; // Par défaut, l'utilisateur n'est pas activé
 
     // New bi-directional mapping: One user has many todos.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

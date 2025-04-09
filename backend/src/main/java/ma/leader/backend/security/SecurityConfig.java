@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()// Normally /api/auth/** bdltha db ghir bach mndir authentification ... hhh
                         .requestMatchers("/api/todos/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/contacts/**").permitAll()
                         .requestMatchers("/api/news/**").permitAll()
                         .requestMatchers("/api/etudiant/**").hasAuthority("ETUDIANT") // Ghir example hada, pour le moment ma3endo ta utilité puisque la route n'existe pas

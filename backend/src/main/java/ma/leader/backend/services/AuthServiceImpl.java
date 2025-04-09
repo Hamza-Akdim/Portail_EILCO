@@ -24,6 +24,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailVerificationService emailVerificationService;
+
     @Override
     public String registreUser(SignupRequest request) throws UserAlreadyExists {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
@@ -40,33 +43,23 @@ public class AuthServiceImpl implements AuthService {
         newUser.setEmail(request.getEmail());
         newUser.setEncryptedPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(userRole);
+        newUser.setEnabled(false); // L'utilisateur est désactivé jusqu'à la vérification de l'email
 
         userRepository.save(newUser);
 
-        return jwtUtils.generateToken(
-                newUser.getId(), // userId as subject
-                newUser.getEmail(),
-                newUser.getFirstname(),
-                newUser.getLastname(),
-                userRole
-        );
+        // Envoyer l'email de vérification
+        emailVerificationService.createVerificationToken(newUser);
+
+        return "Un email de vérification a été envoyé à votre adresse email.";
     }
 
     /**
      * Maps role code from request to UserRole enum.
      */
     private UserRole mapRoleFromRequest(String role) {
-        switch (role) {
-            case "ETUD":
-                return UserRole.ETUDIANT;
-            case "PROF":
-                return UserRole.PROFESSEUR;
-            case "EDIT":
-                return UserRole.EDITEUR;
-            case "ADM":
-                return UserRole.ADMIN;
-            default:
-                throw new IllegalArgumentException("Invalid role provided: " + role);
+        if (role == null || role.isEmpty()) {
+            return UserRole.ETUDIANT; // Rôle par défaut
         }
+        return UserRole.valueOf(role.toUpperCase());
     }
 }

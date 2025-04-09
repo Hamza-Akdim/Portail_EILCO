@@ -3,13 +3,33 @@ server:
 
 auth:
   token:
-    expirationInMils: 3600000
     jwtSecret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
+    expirationInMils: 86400000
 
 cookie:
   client:
     path: "http://localhost:5173"
+
 spring:
+  mail:
+    host: mail.eilco-ulco.fr
+    port: 25
+    username: projet-portail-enseignant@eilco-ulco.fr
+    password: 0Eilco672
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+          connectiontimeout: 30000
+          timeout: 30000
+          writetimeout: 30000
+        transport:
+          protocol: smtp
+        debug: true
+        from: projet-portail-enseignant@eilco-ulco.fr
+
   mvc:
     static-path-pattern: ./backend/uploads/**
   web:
@@ -17,7 +37,6 @@ spring:
       static-locations: file:./backend/uploads/uploads/
   application:
     name: backend
-
 
   datasource:
     url: jdbc:mysql://localhost:3306/portail_eilco_db?createDatabaseIfNotExist=true
@@ -30,9 +49,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-
-    #show-sql: true
-
+    show-sql: true
     hibernate:
       ddl-auto: update
-

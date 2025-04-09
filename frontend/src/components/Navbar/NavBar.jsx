@@ -78,7 +78,7 @@ function Navbar() {
   // Ajouter une page si le rôle est ADMIN ou EDITEUR
   if (role === "ADMIN" || role === "EDITEUR") {
     allPages.push({
-      id: 7,
+      id: 8,
       title: "Ajouter Contacts",
       lien: "/espace-admin/add-contact",
     });

@@ -86,7 +86,7 @@ const ListTodoComponent = () => {
         <p>{error}</p>
         <button
           onClick={listTodos}
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
         >
           Retry
         </button>
@@ -98,7 +98,7 @@ const ListTodoComponent = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 className="text-2xl font-bold text-center mb-6">Liste des Tâches</h2>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 block mx-auto"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 block mx-auto shadow-md"
         onClick={addNewTodo}
         aria-label="Ajouter une nouvelle tâche"
       >
@@ -133,10 +133,10 @@ const ListTodoComponent = () => {
               <tbody>
                 {todos.map((todo) => (
                   <tr key={todo.id} className="even:bg-gray-50">
-                    <td className="border border-gray-300 px-6 py-4 text-sm text-gray-900">
+                    <td className="border border-gray-300 px-6 py-4 text-sm text-gray-900 whitespace-normal max-w-[200px] break-words">
                       {todo.title}
                     </td>
-                    <td className="border border-gray-300 px-6 py-4 text-sm text-gray-900">
+                    <td className="border border-gray-300 px-6 py-4 text-sm text-gray-900 whitespace-normal max-w-[300px] break-words">
                       {todo.description}
                     </td>
                     <td
@@ -150,27 +150,27 @@ const ListTodoComponent = () => {
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => updateTodo(todo.id)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded shadow-md"
                         >
                           Modifier
                         </button>
                         <button
                           onClick={() => removeTodo(todo.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded shadow-md"
                         >
                           Supprimer
                         </button>
                         {!todo.completed ? (
                           <button
                             onClick={() => markCompleteTodo(todo.id)}
-                            className="text-green-600 hover:text-green-900"
+                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded shadow-md"
                           >
                             Terminer
                           </button>
                         ) : (
                           <button
                             onClick={() => markInCompleteTodo(todo.id)}
-                            className="text-yellow-600 hover:text-yellow-900"
+                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded shadow-md"
                           >
                             Réouvrir
                           </button>
@@ -190,8 +190,8 @@ const ListTodoComponent = () => {
                 key={todo.id}
                 className="bg-white rounded-lg shadow-md p-4 border border-gray-200"
               >
-                <h3 className="text-lg font-semibold mb-2">{todo.title}</h3>
-                <p className="text-gray-600 mb-2">{todo.description}</p>
+                <h3 className="text-lg font-semibold mb-2 break-words">{todo.title}</h3>
+                <p className="text-gray-600 mb-2 break-words">{todo.description}</p>
                 <div
                   className={`text-sm font-medium mb-2 ${
                     todo.completed ? "text-green-600" : "text-red-600"
@@ -202,27 +202,27 @@ const ListTodoComponent = () => {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => updateTodo(todo.id)}
-                    className="text-blue-600 hover:text-blue-900"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded shadow-md"
                   >
                     Modifier
                   </button>
                   <button
                     onClick={() => removeTodo(todo.id)}
-                    className="text-red-600 hover:text-red-900"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded shadow-md"
                   >
                     Supprimer
                   </button>
                   {!todo.completed ? (
                     <button
                       onClick={() => markCompleteTodo(todo.id)}
-                      className="text-green-600 hover:text-green-900"
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded shadow-md"
                     >
                       Terminer
                     </button>
                   ) : (
                     <button
                       onClick={() => markInCompleteTodo(todo.id)}
-                      className="text-yellow-600 hover:text-yellow-900"
+                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded shadow-md"
                     >
                       Réouvrir
                     </button>
