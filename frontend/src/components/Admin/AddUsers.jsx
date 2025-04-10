@@ -12,9 +12,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Snackbar,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { signUp } from "../../utils/apiFunctions";
+import { registerUsersFromExcel, signUp } from "../../utils/apiFunctions";
+import * as XLSX from "xlsx";
 
 const AddUsers = () => {
   const [firstNameEtud, setFirstNameEtud] = useState("");
@@ -30,17 +32,20 @@ const AddUsers = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [apiError, setApiError] = useState("");
 
+  const [excelFile, setExcelFile] = useState(null);
+  const [excelUploadMessages, setExcelUploadMessages] = useState([]);
+
   const roles = [
     { label: "Etudiant", value: "ETUDIANT" },
     { label: "Professeur", value: "PROFESSEUR" },
     { label: "Editeur", value: "EDITEUR" },
-    { label: "Admin", value: "ADMIN" }
+    { label: "Admin", value: "ADMIN" },
   ];
 
   const handleRole = (e) => {
     setRole(e.target.value);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,16 +71,73 @@ const AddUsers = () => {
       setPasswordEtud("");
       setConfirmPassword("");
       setRole("");
-
-      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       if (error.response) {
-        setApiError(error.response.data || "Une erreur s'est produite. Veuillez réessayer.");
+        setApiError(
+          error.response.data ||
+            "Une erreur s'est produite. Veuillez réessayer."
+        );
       } else {
         setApiError("Une erreur s'est produite. Veuillez réessayer.");
       }
-      setTimeout(() => setApiError(""), 3000);
     }
+  };
+
+  // const handleExcelUpload = async () => {
+  //   if (!excelFile) {
+  //     setApiError("Veuillez sélectionner un fichier Excel.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await registerUsersFromExcel(excelFile);
+  //     setSuccessMessage("Utilisateurs ajoutés avec succès !");
+  //     setExcelFile(null);
+  //   } catch (err) {
+  //     setApiError("Erreur lors de l'importation du fichier.");
+  //   }
+  // };
+
+  const handleExcelUpload = async () => {
+    if (!excelFile) {
+      setApiError("Veuillez sélectionner un fichier Excel.");
+      return;
+    }
+
+    try {
+      const response = await registerUsersFromExcel(excelFile);
+      setExcelUploadMessages(
+        response.data.map((msg) => {
+          const email = msg.email;
+          const status = msg.status;
+          const error = msg.error;
+
+          return { email, status, error };
+        })
+      );
+      setSuccessMessage("Fichier traité avec succès !");
+      setExcelFile(null);
+    } catch (err) {
+      console.log(err)
+      setApiError("Erreur lors de l'importation du fichier.");
+    }
+  };
+
+  const downloadResultsAsExcel = () => {
+    const worksheetData = [
+      ["Email", "Statut", "Message d'erreur"],
+      ...excelUploadMessages.map((msg) => [
+        msg.email,
+        msg.status,
+        msg.error,
+      ]),
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Résultats Import");
+
+    XLSX.writeFile(workbook, "resultats_importation_utilisateurs.xlsx");
   };
 
   return (
@@ -84,7 +146,7 @@ const AddUsers = () => {
         Ajouter des utilisateurs
       </Typography>
 
-      {successMessage && (
+      {/* {successMessage && (
         <Alert severity="success" sx={{ mb: 2, textAlign: "center" }}>
           {successMessage}
         </Alert>
@@ -94,7 +156,27 @@ const AddUsers = () => {
         <Alert severity="error" sx={{ mb: 2, textAlign: "center" }}>
           {apiError}
         </Alert>
-      )}
+      )} */}
+
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage("")}
+      >
+        <Alert onClose={() => setSuccessMessage("")} severity="success">
+          {successMessage}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={!!apiError}
+        autoHideDuration={3000}
+        onClose={() => setApiError("")}
+      >
+        <Alert onClose={() => setApiError("")} severity="error">
+          {apiError}
+        </Alert>
+      </Snackbar>
 
       <Box
         component="form"
@@ -197,6 +279,45 @@ const AddUsers = () => {
         >
           Ajouter
         </Button>
+      </Box>
+
+      <Typography variant="h6" sx={{ mt: 5, mb: 2 }} align="center">
+        Ou ajouter plusieurs utilisateurs avec un fichier Excel :
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 3,
+          maxWidth: "600px",
+          margin: "0 auto",
+        }}
+      >
+        <input
+          type="file"
+          accept=".xlsx,.xls"
+          onChange={(e) => setExcelFile(e.target.files[0])}
+        />
+        <Button
+          variant="contained"
+          sx={{ px: 2, mr: 3 }}
+          color="secondary"
+          onClick={handleExcelUpload}
+        >
+          Importer Excel
+        </Button>
+
+        {excelUploadMessages.length > 0 && (
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={downloadResultsAsExcel}
+          >
+            Télécharger le résultat
+          </Button>
+        )}
       </Box>
     </Container>
   );

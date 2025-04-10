@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class User {
 
     @Id
@@ -31,7 +32,10 @@ public class User {
 
     private boolean enabled = false; // Par défaut, l'utilisateur n'est pas activé
 
-    // New bi-directional mapping: One user has many todos.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Todo> todos;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private EmailVerificationToken verificationToken;
+
 }

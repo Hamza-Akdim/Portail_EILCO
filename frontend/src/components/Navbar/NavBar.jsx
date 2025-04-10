@@ -28,7 +28,6 @@ function Navbar() {
   React.useEffect(() => {
     getUserDetails()
       .then((result) => {
-        console.log(result)
         setFirstname(result.firstname);
         setLastname(result.lastname);
         setEmail(result.email);
@@ -38,6 +37,8 @@ function Navbar() {
         console.log(`Error while fetchinf the user data : ${err}`)
       );
   }, [firstname, lastname, email]);
+
+  
   const allPages = [
     { id: 0, title: "Accueil", lien: "/espace-eilco" },
     {

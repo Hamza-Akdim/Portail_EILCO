@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
-    @Query(value = "SELECT * FROM User u WHERE u.email REGEXP :regex", nativeQuery = true)
+    @Query(value = "SELECT * FROM Users u WHERE u.email REGEXP :regex", nativeQuery = true)
     Optional<List<User>> getUserByEmailRegex(@Param("regex") String email);
 }

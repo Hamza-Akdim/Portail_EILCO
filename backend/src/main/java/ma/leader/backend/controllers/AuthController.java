@@ -7,6 +7,7 @@ import ma.leader.backend.exceptions.UserAlreadyExists;
 import ma.leader.backend.requests.AuthRequest;
 import ma.leader.backend.requests.SignupRequest;
 import ma.leader.backend.responses.AuthResponse;
+import ma.leader.backend.responses.FileResponse;
 import ma.leader.backend.security.JwtUtils;
 import ma.leader.backend.security.UserDetailsImpl;
 import ma.leader.backend.services.AuthService;
@@ -136,7 +137,7 @@ public class AuthController {
     @PostMapping("/signup/excel")
     public ResponseEntity<?> registerUsersFromExcel(@RequestParam("file") MultipartFile file) {
         try {
-            List<String> result = authService.registerUsersFromExcel(file);
+            List<FileResponse> result = authService.registerUsersFromExcel(file);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());

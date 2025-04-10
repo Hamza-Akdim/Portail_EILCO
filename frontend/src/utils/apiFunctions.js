@@ -54,7 +54,7 @@ export const signUp = async (firstName, lastName, email, password, role) => {
     else if (role === "PROFESSEUR") return "PROF";
     else if (role === "EDITEUR") return "EDIT";
     else if (role === "ADMIN") return "ADM";
-    else return "ETUD"; // Default role if none specified
+    else return "ETUD";
   };
 
   const requestBody = {
@@ -170,6 +170,20 @@ export const deleteUser = async (id) => {
     console.log(error);
     return null;
   }
+};
+
+export const registerUsersFromExcel = async (excelFile) => {
+  const formData = new FormData();
+  formData.append("file", excelFile);
+
+  const response = await api.post("/api/auth/signup/excel", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  console.log(response)
+  return response;
 };
 
 //-------------------------------------

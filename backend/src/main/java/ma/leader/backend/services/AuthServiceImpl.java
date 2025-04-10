@@ -5,6 +5,7 @@ import ma.leader.backend.enums.UserRole;
 import ma.leader.backend.exceptions.UserAlreadyExists;
 import ma.leader.backend.repositories.UserRepository;
 import ma.leader.backend.requests.SignupRequest;
+import ma.leader.backend.responses.FileResponse;
 import ma.leader.backend.security.JwtUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -65,8 +66,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<String> registerUsersFromExcel(MultipartFile file) throws Exception {
-        List<String> result = new ArrayList<>();
+    public List<FileResponse> registerUsersFromExcel(MultipartFile file) throws Exception {
+        List<FileResponse> result = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
@@ -74,23 +75,26 @@ public class AuthServiceImpl implements AuthService {
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             if (row == null) continue;
-
+            String email = "";
             try {
                 String firstname = row.getCell(0).getStringCellValue();
                 String lastname = row.getCell(1).getStringCellValue();
-                String email = row.getCell(2).getStringCellValue();
+                email = row.getCell(2).getStringCellValue();
                 String password = row.getCell(3).getStringCellValue();
                 String role = row.getCell(4).getStringCellValue();
 
                 SignupRequest request = new SignupRequest(firstname, lastname, email, password, role);
                 registreUser(request);
 
-                result.add("Success: " + email);
+                FileResponse fileResponse = new FileResponse(email,"Succès", "");
+                result.add(fileResponse);
 
             } catch (UserAlreadyExists e) {
-                result.add("Ignoré (existe déjà) : " + e.getMessage());
+                FileResponse fileResponse = new FileResponse(email,"Existe déjà", e.getMessage());
+                result.add(fileResponse);
             } catch (Exception e) {
-                result.add("Ligne échouée " + (i + 1) + ": " + e.getMessage());
+                FileResponse fileResponse = new FileResponse(email,"Echec", e.getMessage());
+                result.add(fileResponse);
             }
         }
 
