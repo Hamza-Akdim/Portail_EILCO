@@ -223,6 +223,7 @@ export const addNews = async (news) => {
     }
     // Utilisation de l'instance api pour faire la requête
     const response = await api.post(`${NEWS_ENDPOINT}/add`, formData);
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Erreur lors de l'ajout de la news :", error);
